@@ -1,0 +1,49 @@
+@import '../manage-shared';
+
+.layout {
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: 960px) {
+    grid-template-columns: 360px 1fr;
+    align-items: start;
+  }
+}
+
+.form-panel {
+  padding: 1.15rem;
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+  }
+}
+
+.meta {
+  color: #646970;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.actions {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.link,
+.link-danger {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.link {
+  color: #2271b1;
+  font-weight: 600;
+}
+
+.link-danger {
+  color: #d63638;
+}

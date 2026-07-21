@@ -1,0 +1,42 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div id="content-main">
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      <fieldset class="module aligned">
+        {{ form.as_div }}
+      </fieldset>
+      <div class="submit-row">
+        <input type="submit" value="Импортировать" class="default">
+        <a href="{% url 'admin:api_product_changelist' %}" class="closelink">Отмена</a>
+      </div>
+    </form>
+
+    <div class="module" style="margin-top:24px;padding:16px">
+      <h2>Формат файла</h2>
+      <p><strong>CSV:</strong> одна таблица товаров в UTF-8.</p>
+      <p>
+        <strong>XLSX:</strong> лист <code>products</code> или <code>товары</code>;
+        необязательный лист <code>services</code> или <code>услуги</code>.
+      </p>
+      <p>
+        Колонки товаров: <code>sku</code>, <code>slug</code>, <code>name</code>,
+        <code>material</code>, <code>style</code>, <code>product_type</code>,
+        <code>material_label</code>, <code>price</code>, <code>image_url</code>,
+        <code>images</code>, <code>description</code>, <code>dimensions</code>,
+        <code>finish</code>, <code>featured</code>, <code>category</code>,
+        <code>extra_services</code>.
+      </p>
+      <p>
+        Несколько ссылок на изображения и коды услуг разделяйте символом
+        <code>|</code>.
+      </p>
+      <p>
+        Колонки услуг: <code>slug</code>, <code>title</code>,
+        <code>description</code>, <code>price</code>, <code>is_active</code>,
+        <code>sort_order</code>.
+      </p>
+    </div>
+  </div>
+{% endblock %}

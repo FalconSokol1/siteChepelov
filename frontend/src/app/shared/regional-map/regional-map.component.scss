@@ -1,0 +1,45 @@
+.regional-map {
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  background: #eceae4;
+  position: relative;
+
+  &--compact {
+    min-height: 420px;
+  }
+
+  &--mini {
+    min-height: 200px;
+
+    .regional-map__canvas {
+      min-height: 200px;
+    }
+  }
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    z-index: 1;
+  }
+}
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+}
+
+:host-context(.region-showcase__visual) {
+  @media (max-width: 900px) {
+    min-height: 0;
+    height: 100%;
+
+    .regional-map {
+      min-height: 0;
+      height: 100%;
+    }
+  }
+}

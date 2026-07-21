@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  background: #f0f0f1;
+}
+
+.shell__sidebar {
+  background: #1d2327;
+  color: #f0f0f1;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+}
+
+.shell__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 1.1rem 1rem;
+  text-decoration: none;
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  img {
+    height: 36px;
+    width: auto;
+  }
+}
+
+.shell__nav {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0;
+  flex: 1;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 1rem;
+    color: #c3c4c7;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-left: 4px solid transparent;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    .material-symbols-outlined {
+      font-size: 1.25rem;
+      opacity: 0.85;
+    }
+
+    &:hover {
+      background: #2c3338;
+      color: #fff;
+    }
+
+    &.is-active {
+      background: #2271b1;
+      color: #fff;
+      border-left-color: #72aee6;
+    }
+  }
+}
+
+.shell__footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+
+  a,
+  button {
+    color: #72aee6;
+    background: none;
+    border: 0;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    text-decoration: none;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.shell__user {
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.shell__main {
+  padding: 1.5rem 1.75rem 2.5rem;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .shell__sidebar {
+    position: relative;
+    height: auto;
+  }
+
+  .shell__nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+
+    a {
+      border-left: 0;
+      border-bottom: 3px solid transparent;
+      padding: 0.55rem 0.75rem;
+
+      &.is-active {
+        border-bottom-color: #72aee6;
+      }
+    }
+  }
+
+  .shell__footer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+}

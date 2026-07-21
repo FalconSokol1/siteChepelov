@@ -1,0 +1,29 @@
+@import '../manage-shared';
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+
+  p {
+    margin: 0;
+    color: #646970;
+    max-width: 40rem;
+  }
+}
+
+.hint-cell {
+  color: #50575e;
+  font-size: 0.875rem;
+  max-width: 28rem;
+  line-height: 1.4;
+}
+
+.meta {
+  color: #646970;
+  font-size: 0.8rem;
+  margin-top: 0.15rem;
+}

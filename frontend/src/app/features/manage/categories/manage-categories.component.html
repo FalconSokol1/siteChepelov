@@ -1,0 +1,78 @@
+<div class="page">
+  <header class="page__head">
+    <h1>Категории</h1>
+    <p>Карточки категорий на главной и в каталоге. У каждой должно быть понятное фото.</p>
+  </header>
+
+  @if (message()) { <div class="notice notice--ok">{{ message() }}</div> }
+  @if (error()) { <div class="notice notice--error">{{ error() }}</div> }
+
+  <div class="layout">
+    <div class="panel form-panel">
+      <h2>{{ editingId ? 'Редактирование' : 'Новая категория' }}</h2>
+      <div class="form-grid">
+        <label class="field">
+          <span>Название</span>
+          <input [(ngModel)]="draft.title" name="title" />
+        </label>
+        <label class="field">
+          <span>Код (slug)</span>
+          <input [(ngModel)]="draft.slug" name="slug" />
+        </label>
+        <label class="field field--full">
+          <span>Подзаголовок</span>
+          <input [(ngModel)]="draft.subtitle" name="subtitle" />
+        </label>
+        <div class="field field--full">
+          <app-manage-media-field
+            label="Фото категории"
+            hint="Карточка на главной: один выразительный памятник этой категории."
+            placeholder="Загрузите обложку категории"
+            ratio="wide"
+            [(value)]="draft.image_url"
+          />
+        </div>
+        <label class="field">
+          <span>Подпись цены</span>
+          <input [(ngModel)]="draft.price_from" name="price_from" placeholder="от 24 500 ₽" />
+        </label>
+        <label class="field">
+          <span>Порядок</span>
+          <input type="number" [(ngModel)]="draft.sort_order" name="sort_order" />
+        </label>
+        <div class="form-actions">
+          <button type="button" class="btn btn--primary" (click)="save()">Сохранить</button>
+          @if (editingId) {
+            <button type="button" class="btn" (click)="cancel()">Отмена</button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <table class="table">
+        <thead><tr><th></th><th>Название</th><th>Цена</th><th>Порядок</th><th></th></tr></thead>
+        <tbody>
+          @for (item of items(); track item.id) {
+            <tr>
+              <td>
+                @if (item.image_url) {
+                  <img [src]="item.image_url" [alt]="item.title" class="thumb" />
+                } @else {
+                  <span class="thumb thumb--empty">нет</span>
+                }
+              </td>
+              <td><strong>{{ item.title }}</strong><div class="meta">{{ item.slug }}</div></td>
+              <td>{{ item.price_from || '—' }}</td>
+              <td>{{ item.sort_order }}</td>
+              <td class="actions">
+                <button type="button" class="link" (click)="edit(item)">Изменить</button>
+                <button type="button" class="link-danger" (click)="remove(item)">Удалить</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

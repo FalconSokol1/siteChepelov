@@ -1,0 +1,40 @@
+<div class="page">
+  <header class="page__head">
+    <h1>Консоль</h1>
+    <p>Редактируйте каталог, тексты и заявки — изменения сразу видны на сайте.</p>
+  </header>
+
+  @if (error()) {
+    <div class="notice notice--error">{{ error() }}</div>
+  }
+
+  @if (stats(); as s) {
+    <div class="cards">
+      @for (card of cards; track card.key) {
+        <a [routerLink]="card.link" class="card" [style.--accent]="card.color">
+          <span class="card__value">{{ s[card.key] }}</span>
+          <span class="card__label">{{ card.label }}</span>
+        </a>
+      }
+    </div>
+  }
+
+  <section class="quick">
+    <h2>Быстрые действия</h2>
+    <div class="quick__row">
+      <a routerLink="/manage/products/new" class="btn btn--primary">+ Новый товар</a>
+      <a routerLink="/manage/pages/home" class="btn">Главная и фото героя</a>
+      <a routerLink="/manage/portfolio" class="btn">Портфолио — фото работ</a>
+      <a routerLink="/manage/consultations" class="btn">Заявки</a>
+    </div>
+  </section>
+
+  <section class="tips panel">
+    <h2>Как загружать фото</h2>
+    <ul>
+      <li><strong>Товары</strong> — главное фото карточки + галерея ракурсов. Кнопка «Загрузить фото», не нужно вручную копировать ссылки.</li>
+      <li><strong>Категории и портфолио</strong> — одно понятное фото на карточку; превью видно сразу.</li>
+      <li><strong>Страницы</strong> — у каждого блока подсказка, какое фото туда класть (герой, СВО, о компании…).</li>
+    </ul>
+  </section>
+</div>

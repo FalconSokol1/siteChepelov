@@ -1,0 +1,34 @@
+<div class="page">
+  <header class="page__head">
+    <h1>Отзывы</h1>
+    <p>Отзывы, опубликованные посетителями сайта.</p>
+  </header>
+
+  @if (error()) { <div class="notice notice--error">{{ error() }}</div> }
+
+  <div class="panel">
+    @if (!items().length) {
+      <p class="empty">Отзывов пока нет</p>
+    } @else {
+      <table class="table">
+        <thead><tr><th>Автор</th><th>Оценка</th><th>Отзыв</th><th>Дата</th><th></th></tr></thead>
+        <tbody>
+          @for (item of items(); track item.id) {
+            <tr>
+              <td><strong>{{ item.author }}</strong></td>
+              <td>{{ item.rating }} / 5</td>
+              <td class="review">
+                {{ item.text }}
+                @if (item.image_url) {
+                  <a [href]="item.image_url" target="_blank" rel="noopener">Открыть фото</a>
+                }
+              </td>
+              <td>{{ item.created_at | date: 'dd.MM.yyyy HH:mm' }}</td>
+              <td><button type="button" class="link-danger" (click)="remove(item)">Удалить</button></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

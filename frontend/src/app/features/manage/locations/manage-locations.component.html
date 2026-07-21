@@ -1,0 +1,71 @@
+<div class="page">
+  <header class="page__head">
+    <h1>Адреса на карте</h1>
+    <p>Точки офисов и производства.</p>
+  </header>
+
+  @if (message()) {
+    <div class="notice notice--ok">{{ message() }}</div>
+  }
+  @if (error()) {
+    <div class="notice notice--error">{{ error() }}</div>
+  }
+
+  <div class="layout">
+    <div class="panel list">
+      @for (item of items(); track item.id) {
+        <button
+          type="button"
+          class="list__item"
+          [class.is-active]="selected?.id === item.id"
+          (click)="select(item)"
+        >
+          <strong>{{ item.city }}</strong>
+          <span>{{ item.address || 'без адреса' }}</span>
+        </button>
+      }
+    </div>
+
+    @if (selected; as loc) {
+      <div class="panel form-panel">
+        <div class="form-grid">
+          <label class="field">
+            <span>Город</span>
+            <input [(ngModel)]="loc.city" name="city" />
+          </label>
+          <label class="field">
+            <span>Телефон</span>
+            <input [(ngModel)]="loc.phone" name="phone" />
+          </label>
+          <label class="field field--full">
+            <span>Адрес</span>
+            <input [(ngModel)]="loc.address" name="address" />
+          </label>
+          <label class="field">
+            <span>Широта</span>
+            <input type="number" step="any" [(ngModel)]="loc.latitude" name="lat" />
+          </label>
+          <label class="field">
+            <span>Долгота</span>
+            <input type="number" step="any" [(ngModel)]="loc.longitude" name="lng" />
+          </label>
+          <label class="field field--full">
+            <span>Описание</span>
+            <textarea [(ngModel)]="loc.description" name="description"></textarea>
+          </label>
+          <label class="check">
+            <input type="checkbox" [(ngModel)]="loc.is_headquarters" name="hq" />
+            Главный офис
+          </label>
+          <label class="check">
+            <input type="checkbox" [(ngModel)]="loc.is_highlighted" name="hl" />
+            Выделить на карте
+          </label>
+          <div class="form-actions">
+            <button type="button" class="btn btn--primary" (click)="save()">Сохранить</button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

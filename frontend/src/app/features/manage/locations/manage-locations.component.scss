@@ -1,0 +1,44 @@
+@import '../manage-shared';
+
+.layout {
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 260px 1fr;
+    align-items: start;
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.list__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-bottom: 1px solid #dcdcde;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+
+  span {
+    color: #646970;
+    font-size: 0.8rem;
+  }
+
+  &.is-active {
+    background: #f0f6fc;
+    box-shadow: inset 4px 0 0 #2271b1;
+  }
+}
+
+.form-panel {
+  padding: 1.25rem;
+}

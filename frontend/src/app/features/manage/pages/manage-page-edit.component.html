@@ -1,0 +1,152 @@
+<div class="page">
+  <header class="page__head">
+    <h1>{{ isNew() ? 'Новая страница' : (page.title || 'Страница') }}</h1>
+    <p>
+      <a routerLink="/manage/pages">← Все страницы</a>
+      @if (!isNew()) {
+        · код: <code>{{ slug }}</code>
+      }
+    </p>
+  </header>
+
+  @if (message()) {
+    <div class="notice notice--ok">{{ message() }}</div>
+  }
+  @if (error()) {
+    <div class="notice notice--error">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <p>Загрузка…</p>
+  } @else {
+    <div class="editor">
+      <div class="panel form-panel">
+        <h2>Настройки страницы</h2>
+        <div class="form-grid">
+          <label class="field">
+            <span>Название</span>
+            <input [(ngModel)]="page.title" name="title" />
+          </label>
+          @if (isNew()) {
+            <label class="field">
+              <span>Код страницы (slug)</span>
+              <input [(ngModel)]="page.slug" name="slug" placeholder="about" />
+            </label>
+          }
+          <label class="check" style="align-self: end; padding-bottom: 0.5rem">
+            <input type="checkbox" [(ngModel)]="page.is_published" name="is_published" />
+            Опубликована
+          </label>
+          <label class="field field--full">
+            <span>SEO-заголовок</span>
+            <input [(ngModel)]="page.meta_title" name="meta_title" />
+          </label>
+          <label class="field field--full">
+            <span>SEO-описание</span>
+            <textarea [(ngModel)]="page.meta_description" name="meta_description" rows="3"></textarea>
+          </label>
+        </div>
+      </div>
+
+      <div class="blocks">
+        <div class="blocks__head">
+          <div>
+            <h2>Блоки контента</h2>
+            <p class="blocks__intro">Каждый блок — отдельная секция на сайте. Смотрите подсказки: куда идёт текст и какое фото нужно.</p>
+          </div>
+          <button type="button" class="btn" (click)="addBlock()">+ Блок</button>
+        </div>
+
+        @for (block of page.blocks; track trackBlock($index, block); let i = $index) {
+          <div class="panel block" [class.block--off]="!block.is_enabled">
+            <div class="block__head">
+              <div class="block__titles">
+                <strong>{{ blockTitle(block, i) }}</strong>
+                <span class="block__key">код: {{ block.key || '—' }}</span>
+              </div>
+              <div class="block__tools">
+                <button type="button" class="icon-btn" title="Выше" [disabled]="i === 0" (click)="moveBlock(i, -1)">↑</button>
+                <button type="button" class="icon-btn" title="Ниже" [disabled]="i === page.blocks.length - 1" (click)="moveBlock(i, 1)">↓</button>
+                <label class="check">
+                  <input type="checkbox" [(ngModel)]="block.is_enabled" [name]="'en' + i" />
+                  Включён
+                </label>
+                <button type="button" class="link-danger" (click)="removeBlock(i)">Удалить</button>
+              </div>
+            </div>
+
+            <p class="block__hint">{{ blockHint(block) }}</p>
+
+            <div class="form-grid">
+              <label class="field">
+                <span>Код блока</span>
+                <input [(ngModel)]="block.key" [name]="'key' + i" />
+              </label>
+              <label class="field">
+                <span>Заголовок</span>
+                <input [(ngModel)]="block.title" [name]="'btitle' + i" />
+              </label>
+              <label class="field field--full">
+                <span>Текст</span>
+                <textarea [(ngModel)]="block.body" [name]="'body' + i" rows="5"></textarea>
+              </label>
+
+              <div class="field field--full">
+                <app-manage-media-field
+                  [label]="needsImage(block) ? ('Фото: ' + blockTitle(block, i)) : 'Картинка (необязательно)'"
+                  [hint]="blockImageHint(block)"
+                  placeholder="Загрузите фото для этой секции на сайте"
+                  ratio="wide"
+                  [(value)]="block.image_url"
+                />
+              </div>
+
+              <label class="field">
+                <span>Текст кнопки</span>
+                <input [(ngModel)]="block.button_label" [name]="'bl' + i" />
+              </label>
+              <label class="field">
+                <span>Ссылка кнопки</span>
+                <input [(ngModel)]="block.button_url" [name]="'bu' + i" />
+              </label>
+
+              <div class="field field--full extra-fields">
+                <div class="extra-fields__head">
+                  <span>Дополнительные подписи и настройки</span>
+                  <button type="button" class="btn" (click)="addExtra(block)">+ Поле</button>
+                </div>
+                <p class="extra-fields__hint">Подписи кнопок, пункты списков и другие мелкие тексты этого блока.</p>
+                @for (entry of extraEntries(block); track entry[0]) {
+                  <div class="extra-field">
+                    <input
+                      class="extra-field__key"
+                      [ngModel]="entry[0]"
+                      (ngModelChange)="renameExtra(block, entry[0], $event)"
+                      [name]="'extra-key-' + i + '-' + $index"
+                      aria-label="Код поля"
+                    />
+                    <textarea
+                      class="extra-field__value"
+                      [ngModel]="entry[1]"
+                      (ngModelChange)="setExtra(block, entry[0], $event)"
+                      [name]="'extra-value-' + i + '-' + $index"
+                      rows="2"
+                      aria-label="Значение"
+                    ></textarea>
+                    <button type="button" class="link-danger" (click)="removeExtra(block, entry[0])">Удалить</button>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="form-actions sticky-save">
+        <button type="button" class="btn btn--primary" (click)="save()" [disabled]="saving()">
+          {{ saving() ? 'Сохранение…' : 'Обновить страницу' }}
+        </button>
+      </div>
+    </div>
+  }
+</div>

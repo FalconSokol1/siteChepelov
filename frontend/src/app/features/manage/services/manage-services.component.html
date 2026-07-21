@@ -1,0 +1,80 @@
+<div class="page">
+  <header class="page__head">
+    <h1>Доп. услуги</h1>
+    <p>Услуги, которые предлагаются вместе с памятником.</p>
+  </header>
+
+  @if (message()) {
+    <div class="notice notice--ok">{{ message() }}</div>
+  }
+  @if (error()) {
+    <div class="notice notice--error">{{ error() }}</div>
+  }
+
+  <div class="layout">
+    <div class="panel form-panel">
+      <h2>{{ editingId ? 'Редактирование' : 'Новая услуга' }}</h2>
+      <div class="form-grid">
+        <label class="field">
+          <span>Название</span>
+          <input [(ngModel)]="draft.title" name="title" />
+        </label>
+        <label class="field">
+          <span>Код (slug)</span>
+          <input [(ngModel)]="draft.slug" name="slug" />
+        </label>
+        <label class="field field--full">
+          <span>Описание</span>
+          <textarea [(ngModel)]="draft.description" name="description"></textarea>
+        </label>
+        <label class="field">
+          <span>Цена (пусто = без цены)</span>
+          <input type="number" [(ngModel)]="draft.price" name="price" />
+        </label>
+        <label class="field">
+          <span>Порядок</span>
+          <input type="number" [(ngModel)]="draft.sort_order" name="sort_order" />
+        </label>
+        <label class="check">
+          <input type="checkbox" [(ngModel)]="draft.is_active" name="is_active" />
+          Показывать на сайте
+        </label>
+        <div class="form-actions">
+          <button type="button" class="btn btn--primary" (click)="save()">Сохранить</button>
+          @if (editingId) {
+            <button type="button" class="btn" (click)="cancel()">Отмена</button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Цена</th>
+            <th>Статус</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items(); track item.id) {
+            <tr>
+              <td>
+                <strong>{{ item.title }}</strong>
+                <div class="meta">{{ item.slug }}</div>
+              </td>
+              <td>{{ item.price == null ? '—' : item.price + ' ₽' }}</td>
+              <td>{{ item.is_active ? 'Активна' : 'Скрыта' }}</td>
+              <td class="actions">
+                <button type="button" class="link" (click)="edit(item)">Изменить</button>
+                <button type="button" class="link-danger" (click)="remove(item)">Удалить</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

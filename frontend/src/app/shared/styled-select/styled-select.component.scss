@@ -1,0 +1,116 @@
+.styled-select {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+
+  &__label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-secondary);
+  }
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.6875rem 0.875rem;
+    border: 1px solid rgba(13, 13, 13, 0.14);
+    border-radius: 0;
+    background: #fff;
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-primary);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+
+    @media (max-width: 900px) {
+      font-size: 16px;
+    }
+
+    &:hover:not(:disabled) {
+      border-color: rgba(183, 154, 114, 0.55);
+      background: #fffcfa;
+    }
+
+    &:focus-visible {
+      outline: none;
+      border-color: var(--color-champagne);
+      box-shadow: 0 0 0 3px rgba(183, 154, 114, 0.2);
+    }
+  }
+
+  &__value {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__chevron {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    color: var(--color-champagne);
+    transition: transform 0.2s ease;
+  }
+
+  &--open &__chevron {
+    transform: rotate(180deg);
+  }
+
+  &__list {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    right: 0;
+    z-index: 40;
+    margin: 0;
+    padding: 0.375rem 0;
+    list-style: none;
+    max-height: min(16rem, 45dvh);
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid rgba(183, 154, 114, 0.35);
+    box-shadow: 0 16px 36px rgba(13, 13, 13, 0.14);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &__option {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-primary);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover,
+    &--active {
+      background: rgba(183, 154, 114, 0.14);
+      color: var(--color-primary);
+    }
+
+    &--active {
+      font-weight: 600;
+      color: var(--color-bordeaux);
+    }
+  }
+
+  &--disabled &__trigger {
+    opacity: 0.45;
+    cursor: not-allowed;
+    background: var(--color-secondary-container);
+  }
+}

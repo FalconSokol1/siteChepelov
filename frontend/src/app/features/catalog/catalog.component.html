@@ -1,0 +1,129 @@
+<app-header />
+<main class="catalog">
+  <header class="page-intro page-intro--row container">
+    <div class="page-intro__copy">
+      <h1 class="page-intro__title">{{ cms.text('catalog', 'intro', 'title', 'Каталог памятников') }}</h1>
+    </div>
+    @if (!loading()) {
+      <p class="page-intro__meta">{{ products().length }} моделей · {{ cms.text('catalog', 'intro', 'body', 'ИП Чепелов Д.В.') }}</p>
+    }
+  </header>
+
+  @if (filtersOpen()) {
+    <button
+      type="button"
+      class="catalog__backdrop"
+      (click)="closeFilters()"
+      aria-label="Закрыть фильтры"
+    ></button>
+  }
+
+  <div class="catalog__workspace">
+    <aside class="catalog__filters" [class.catalog__filters--open]="filtersOpen()">
+      <div class="catalog__filters-header">
+        <span class="catalog__filters-handle" aria-hidden="true"></span>
+        <div class="catalog__filters-heading">
+          <p class="catalog__filters-title">{{ cms.text('catalog', 'filters', 'title', 'Фильтры') }}</p>
+          @if (activeFiltersCount() > 0) {
+            <span class="catalog__filters-count">{{ activeFiltersCount() }} {{ cms.data('catalog', 'filters', 'selected', 'выбрано') }}</span>
+          }
+        </div>
+        <button type="button" class="catalog__filters-close" (click)="closeFilters()" aria-label="Закрыть фильтры">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="catalog__filters-body">
+        <p class="catalog__filters-title catalog__filters-title--desktop">{{ cms.text('catalog', 'filters', 'title', 'Фильтры') }}</p>
+        <app-styled-select
+          [label]="cms.data('catalog', 'filters', 'material', 'Материал')"
+          [(ngModel)]="material"
+          (ngModelChange)="applyFilters()"
+          [options]="selectOptions(materialOptions, cms.data('catalog', 'filters', 'all_materials', 'Все материалы'))"
+        />
+        <app-styled-select
+          [label]="cms.data('catalog', 'filters', 'style', 'Стиль')"
+          [(ngModel)]="style"
+          (ngModelChange)="applyFilters()"
+          [options]="selectOptions(styleOptions, cms.data('catalog', 'filters', 'all_styles', 'Все стили'))"
+        />
+        <app-styled-select
+          [label]="cms.data('catalog', 'filters', 'type', 'Тип')"
+          [(ngModel)]="type"
+          (ngModelChange)="applyFilters()"
+          [options]="selectOptions(typeOptions, cms.data('catalog', 'filters', 'all_types', 'Все типы'))"
+        />
+        <label class="filter-group filter-group--search">
+          <span>{{ cms.data('catalog', 'filters', 'search', 'Поиск') }}</span>
+          <div class="catalog-search">
+            <span class="material-symbols-outlined catalog-search__icon" aria-hidden="true">search</span>
+            <input
+              type="search"
+              class="catalog-search__input"
+              [(ngModel)]="search"
+              (keyup.enter)="applyFilters()"
+              [placeholder]="cms.data('catalog', 'filters', 'search_placeholder', 'Название или артикул')"
+              autocomplete="off"
+              enterkeyhint="search"
+            />
+            @if (search) {
+              <button type="button" class="catalog-search__clear" (click)="search = ''; applyFilters()" aria-label="Очистить поиск">
+                <span class="material-symbols-outlined">close</span>
+              </button>
+            }
+          </div>
+        </label>
+        <button type="button" class="btn btn--ghost catalog__reset" (click)="resetFilters()">{{ cms.data('catalog', 'filters', 'reset', 'Сбросить фильтры') }}</button>
+      </div>
+
+      <div class="catalog__filters-footer">
+        <button type="button" class="btn btn--primary catalog__apply" (click)="closeFilters()">{{ cms.data('catalog', 'filters', 'show', 'Показать результаты') }}</button>
+      </div>
+    </aside>
+
+    <div class="catalog__scroll" #productsScroll>
+      @if (loading()) {
+        <div class="catalog__grid catalog__grid--loading">
+          @for (i of [1,2,3,4,5,6,7,8]; track i) {
+            <div class="catalog__skeleton"></div>
+          }
+        </div>
+      } @else if (products().length === 0) {
+        <div class="catalog__empty">
+          <p>{{ cms.text('catalog', 'empty', 'title', 'Ничего не найдено') }}</p>
+          <span>{{ cms.text('catalog', 'empty', 'body', 'Попробуйте изменить параметры подбора') }}</span>
+          <button type="button" class="btn btn--ghost" (click)="resetFilters()">{{ cms.text('catalog', 'empty', 'button_label', 'Сбросить') }}</button>
+        </div>
+      } @else {
+        <div class="catalog__grid">
+          @for (product of paginatedProducts(); track product.id) {
+            <app-product-card [product]="product" />
+          }
+        </div>
+        @if (totalPages() > 1) {
+          <nav class="catalog__pagination" aria-label="Страницы каталога">
+            <button type="button" class="catalog__page-nav" [disabled]="page() === 1" (click)="setPage(page() - 1)">{{ cms.data('catalog', 'pagination', 'previous', 'Назад') }}</button>
+            <span class="catalog__page-info">{{ page() }} / {{ totalPages() }}</span>
+            <button type="button" class="catalog__page-nav" [disabled]="page() === totalPages()" (click)="setPage(page() + 1)">{{ cms.data('catalog', 'pagination', 'next', 'Дальше') }}</button>
+          </nav>
+        }
+      }
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="catalog__fab"
+    [class.catalog__fab--active]="activeFiltersCount() > 0"
+    (click)="openFilters()"
+    aria-label="Открыть фильтры"
+    [attr.aria-expanded]="filtersOpen()"
+    [hidden]="filtersOpen()"
+  >
+    <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+    <span class="catalog__fab-label">{{ cms.text('catalog', 'filters', 'title', 'Фильтры') }}</span>
+    @if (activeFiltersCount() > 0) {
+      <span class="catalog__fab-badge">{{ activeFiltersCount() }}</span>
+    }
+  </button>
+</main>

@@ -1,0 +1,32 @@
+<div class="login">
+  <form class="login__card" (ngSubmit)="submit()">
+    <img src="/logo.png" alt="КавказКамень" class="login__logo" />
+    <h1>Панель управления</h1>
+    <p class="login__hint">Войдите, чтобы редактировать сайт</p>
+
+    @if (error()) {
+      <div class="login__error">{{ error() }}</div>
+    }
+
+    <label>
+      <span>Логин</span>
+      <input name="username" [(ngModel)]="username" autocomplete="username" required />
+    </label>
+    <label>
+      <span>Пароль</span>
+      <input
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        autocomplete="current-password"
+        required
+      />
+    </label>
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Вход…' : 'Войти' }}
+    </button>
+
+    <a routerLink="/" class="login__back">← На сайт</a>
+  </form>
+</div>

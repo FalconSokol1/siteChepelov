@@ -1,0 +1,22 @@
+@import '../manage-shared';
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+  color: #646970;
+}
+
+.msg {
+  max-width: 280px;
+  white-space: pre-wrap;
+  font-size: 0.85rem;
+}
+
+.link-danger {
+  background: none;
+  border: 0;
+  color: #d63638;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}

@@ -1,0 +1,49 @@
+<footer class="footer">
+  <div class="footer__top container">
+    <div class="footer__brand">
+      <div class="footer__logo">
+        <img
+          [src]="cms.text('global', 'company', 'image_url', '/logo.png')"
+          [alt]="cms.data('global', 'company', 'logo_alt', 'КавказКамень — памятники из гранита и мрамора')"
+          class="footer__logo-img"
+          width="280"
+          height="104"
+        />
+      </div>
+      <p class="footer__desc">
+        {{ cms.text('global', 'footer', 'body', 'Производство и установка памятников премиум-класса из гранита и мрамора с 2007 года. Офис в пос. Родники, ул. Лесная, 70.') }}
+      </p>
+      <div class="footer__requisites">
+        <strong>{{ cms.data('global', 'company', 'short_name', company.shortName) }}</strong>
+        <span>{{ cms.data('global', 'company', 'director', company.director) }}</span>
+        <span>ИНН {{ cms.data('global', 'company', 'inn', company.inn) }} · {{ cms.data('global', 'company', 'ogrn_label', company.ogrnLabel) }} {{ cms.data('global', 'company', 'ogrn', company.ogrn) }}</span>
+        <span>Дата регистрации: {{ cms.data('global', 'company', 'registration_date', company.registrationDate) }}</span>
+        <span>{{ cms.data('global', 'company', 'activity_code', company.activityCode) }} — {{ cms.data('global', 'company', 'activity', company.activity) }}</span>
+        <span>{{ cms.data('global', 'company', 'legal_address', company.legalAddress) }}</span>
+        <a [href]="cms.data('global', 'company', 'phone_href', company.phoneHref)">{{ cms.data('global', 'company', 'phone', company.phone) }}</a>
+      </div>
+    </div>
+    <div class="footer__col">
+      <a routerLink="/">{{ cms.data('global', 'header-menu', 'home', 'Главная') }}</a>
+      <a routerLink="/catalog">{{ cms.data('global', 'header-menu', 'catalog', 'Каталог') }}</a>
+      <a routerLink="/portfolio">{{ cms.data('global', 'header-menu', 'portfolio', 'Портфолио') }}</a>
+      <a routerLink="/reviews">{{ cms.data('global', 'header-menu', 'reviews', 'Отзывы') }}</a>
+      <a routerLink="/map">{{ cms.data('global', 'header-menu', 'map', 'Офис') }}</a>
+    </div>
+    <div class="footer__col">
+      <a routerLink="/catalog" [queryParams]="{ material: 'granite' }">{{ cms.data('global', 'footer', 'granite', 'Гранит') }}</a>
+      <a routerLink="/catalog" [queryParams]="{ material: 'marble' }">{{ cms.data('global', 'footer', 'marble', 'Мрамор') }}</a>
+      <a routerLink="/catalog" [queryParams]="{ type: 'svo' }">{{ cms.data('global', 'footer', 'svo', 'СВО') }}</a>
+      <a routerLink="/catalog" [queryParams]="{ type: 'complex' }">{{ cms.data('global', 'footer', 'complex', 'Комплексы') }}</a>
+    </div>
+    <div class="footer__col">
+      @for (link of legalLinks; track link.slug) {
+        <a [routerLink]="['/legal', link.slug]">{{ link.label }}</a>
+      }
+    </div>
+  </div>
+  <div class="footer__bottom container">
+    <span>&copy; {{ year }} {{ cms.data('global', 'company', 'brand', company.brand) }}. {{ cms.data('global', 'footer', 'copyright', 'Все права защищены.') }}</span>
+    <a routerLink="/legal/privacy">{{ cms.data('global', 'footer', 'privacy_label', 'Политика обработки ПДн') }}</a>
+  </div>
+</footer>

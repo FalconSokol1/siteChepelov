@@ -1,0 +1,31 @@
+<header class="header" [class.header--open]="menuOpen()">
+  <div class="header__inner">
+    <a routerLink="/" class="header__logo" (click)="closeMenu()">
+      <img
+        [src]="cms.text('global', 'company', 'image_url', '/logo.png')"
+        [alt]="cms.data('global', 'company', 'logo_alt', 'КавказКамень — памятники из гранита и мрамора')"
+        class="header__logo-img"
+        width="280"
+        height="104"
+      />
+    </a>
+
+    <nav class="header__nav">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">{{ cms.data('global', 'header-menu', 'home', 'Главная') }}</a>
+      <a routerLink="/catalog" routerLinkActive="active" (click)="closeMenu()">{{ cms.data('global', 'header-menu', 'catalog', 'Каталог') }}</a>
+      <a routerLink="/portfolio" routerLinkActive="active" (click)="closeMenu()">{{ cms.data('global', 'header-menu', 'portfolio', 'Портфолио') }}</a>
+      <a routerLink="/reviews" routerLinkActive="active" (click)="closeMenu()">{{ cms.data('global', 'header-menu', 'reviews', 'Отзывы') }}</a>
+      <a routerLink="/map" routerLinkActive="active" (click)="closeMenu()">{{ cms.data('global', 'header-menu', 'map', 'Офис') }}</a>
+    </nav>
+
+    <div class="header__actions">
+      <a [href]="cms.data('global', 'company', 'phone_href', 'tel:+79182405787')" class="header__phone">
+        <span class="material-symbols-outlined" aria-hidden="true">call</span>
+        {{ cms.data('global', 'company', 'phone', '+7 (918) 240-57-87') }}
+      </a>
+      <button type="button" class="header__burger" (click)="toggleMenu()" [attr.aria-label]="cms.data('global', 'header-menu', 'menu_aria', 'Меню')">
+        <span class="material-symbols-outlined">{{ menuOpen() ? 'close' : 'menu' }}</span>
+      </button>
+    </div>
+  </div>
+</header>

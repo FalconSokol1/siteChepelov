@@ -1,0 +1,40 @@
+<div
+  class="styled-select"
+  [class.styled-select--open]="open()"
+  [class.styled-select--disabled]="disabled()"
+>
+  @if (label) {
+    <span class="styled-select__label">{{ label }}</span>
+  }
+
+  <button
+    type="button"
+    class="styled-select__trigger"
+    [id]="id"
+    [disabled]="disabled()"
+    (click)="toggle()"
+    [attr.aria-expanded]="open()"
+    aria-haspopup="listbox"
+  >
+    <span class="styled-select__value">{{ selectedLabel() }}</span>
+    <span class="material-symbols-outlined styled-select__chevron" aria-hidden="true">expand_more</span>
+  </button>
+
+  @if (open()) {
+    <ul class="styled-select__list" role="listbox">
+      @for (option of options; track option.value) {
+        <li role="option">
+          <button
+            type="button"
+            class="styled-select__option"
+            [class.styled-select__option--active]="isSelected(option)"
+            [attr.aria-selected]="isSelected(option)"
+            (click)="pick(option)"
+          >
+            {{ option.label }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

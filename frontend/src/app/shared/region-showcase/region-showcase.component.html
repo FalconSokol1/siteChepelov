@@ -1,0 +1,152 @@
+<div class="region-showcase">
+
+  @if (activeLocation(); as loc) {
+
+    <div class="region-showcase__mobile-contact">
+
+      <div class="region-showcase__mobile-contact-head">
+
+        <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+
+        <div>
+
+          <strong>{{ loc.city }}</strong>
+
+          <span>{{ loc.address }}</span>
+
+        </div>
+
+      </div>
+
+      <p class="region-showcase__mobile-note">{{ loc.description }}</p>
+
+      <div class="region-showcase__mobile-actions">
+
+        @if (loc.phone) {
+
+          <a [href]="phoneHref(loc.phone)" class="region-showcase__mobile-btn region-showcase__mobile-btn--call">
+
+            <span class="material-symbols-outlined" aria-hidden="true">call</span>
+
+            {{ cms.data('home', 'office', 'call', 'Позвонить') }}
+
+          </a>
+
+        }
+
+        <a
+
+          [href]="mapsRouteUrl(loc)"
+
+          target="_blank"
+
+          rel="noopener noreferrer"
+
+          class="region-showcase__mobile-btn region-showcase__mobile-btn--route"
+
+        >
+
+          <span class="material-symbols-outlined" aria-hidden="true">directions</span>
+
+          {{ cms.data('home', 'office', 'route', 'Маршрут') }}
+
+        </a>
+
+      </div>
+
+    </div>
+
+  }
+
+
+
+  <div class="region-showcase__visual">
+
+    <app-regional-map
+
+      [locations]="locations()"
+
+      [selectedId]="selectedId()"
+
+      [compact]="false"
+
+      [startWithAll]="false"
+
+      (citySelect)="selectCity($event)"
+
+    />
+
+  </div>
+
+
+
+  <aside class="region-showcase__sidebar">
+
+    <h3 class="region-showcase__sidebar-title">{{ cms.text('home', 'office', 'title', 'Наш офис') }}</h3>
+
+    <p class="region-showcase__sidebar-note">{{ cms.text('home', 'office', 'body', 'пос. Родники, ул. Лесная, 70') }}</p>
+
+
+
+    <div class="region-showcase__cities">
+
+      @for (loc of locations(); track loc.id) {
+
+        <button
+
+          type="button"
+
+          class="region-showcase__city"
+
+          [class.region-showcase__city--active]="selectedId() === loc.id"
+
+          (click)="selectCity(loc)"
+
+        >
+
+          <strong>{{ loc.city }}</strong>
+
+          <span>{{ loc.address }}</span>
+
+        </button>
+
+      }
+
+    </div>
+
+
+
+    @if (activeLocation(); as loc) {
+
+      <div class="region-showcase__detail">
+
+        <span class="region-showcase__region">{{ regionLabel(loc) }}</span>
+
+        <h4>{{ loc.city }}</h4>
+
+        <p>{{ loc.description }}</p>
+
+        @if (loc.phone) {
+
+          <a [href]="phoneHref(loc.phone)" class="region-showcase__phone">{{ loc.phone }}</a>
+
+        }
+
+      </div>
+
+    }
+
+
+
+    <a routerLink="/map" class="btn btn--ghost region-showcase__link">
+
+      {{ cms.text('home', 'office', 'button_label', 'Открыть карту на весь экран') }}
+
+      <span class="material-symbols-outlined">open_in_new</span>
+
+    </a>
+
+  </aside>
+
+</div>
+

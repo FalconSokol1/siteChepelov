@@ -1,0 +1,72 @@
+<div class="gallery">
+  <div class="gallery__head">
+    <div>
+      <strong class="gallery__label">{{ label }}</strong>
+      @if (hint) {
+        <p class="gallery__hint">{{ hint }}</p>
+      }
+    </div>
+    <label class="btn btn--primary gallery__upload">
+      {{ uploading() ? 'Загрузка…' : '+ Добавить фото' }}
+      <input
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        multiple
+        (change)="onFiles($event)"
+        [disabled]="uploading()"
+        hidden
+      />
+    </label>
+  </div>
+
+  @if (!urls.length) {
+    <div class="gallery__empty">
+      <p>Пока нет дополнительных фото. Загрузите 2–4 ракурса: общий вид, деталь камня, сбоку.</p>
+    </div>
+  } @else {
+    <div class="gallery__grid">
+      @for (url of urls; track $index; let i = $index) {
+        <article class="shot">
+          <div class="shot__preview">
+            @if (url) {
+              <img [src]="url" alt="Фото {{ i + 1 }}" />
+            } @else {
+              <span class="shot__missing">Нет превью</span>
+            }
+            @if (i === 0) {
+              <span class="shot__badge">Первое</span>
+            }
+          </div>
+          <div class="shot__tools">
+            <button type="button" class="icon" title="Выше" [disabled]="i === 0" (click)="move(i, -1)">↑</button>
+            <button type="button" class="icon" title="Ниже" [disabled]="i === urls.length - 1" (click)="move(i, 1)">↓</button>
+            @if (i > 0) {
+              <button type="button" class="link" (click)="setAsMain(i)">В начало</button>
+            }
+            <button type="button" class="link-danger" (click)="remove(i)">Удалить</button>
+          </div>
+          <input
+            class="shot__url"
+            [ngModel]="url"
+            (ngModelChange)="updateAt(i, $event)"
+            placeholder="URL"
+          />
+        </article>
+      }
+    </div>
+  }
+
+  <div class="gallery__url-add">
+    <input
+      type="url"
+      [(ngModel)]="draftUrl"
+      placeholder="Или вставьте ссылку на фото…"
+      (keyup.enter)="addUrl()"
+    />
+    <button type="button" class="btn" (click)="addUrl()">Добавить ссылку</button>
+  </div>
+
+  @if (error()) {
+    <p class="gallery__error">{{ error() }}</p>
+  }
+</div>

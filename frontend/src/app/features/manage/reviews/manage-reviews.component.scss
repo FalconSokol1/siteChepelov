@@ -1,0 +1,26 @@
+@import '../manage-shared';
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+  color: #646970;
+}
+
+.review {
+  max-width: 500px;
+  white-space: pre-wrap;
+
+  a {
+    display: block;
+    margin-top: 0.35rem;
+  }
+}
+
+.link-danger {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: #d63638;
+  cursor: pointer;
+  font: inherit;
+}

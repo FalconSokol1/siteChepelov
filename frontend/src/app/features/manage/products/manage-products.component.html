@@ -1,0 +1,81 @@
+<div class="page">
+  <header class="page__head">
+    <h1>Товары</h1>
+    <p>Каталог памятников — выгрузка и загрузка прайс-листа Яндекс Бизнес.</p>
+  </header>
+
+  <div class="toolbar">
+    <input
+      class="search"
+      type="search"
+      placeholder="Поиск по названию или артикулу…"
+      [(ngModel)]="search"
+      (keyup.enter)="load()"
+    />
+    <div class="toolbar__actions">
+      <button type="button" class="btn" (click)="load()" [disabled]="busy()">Найти</button>
+      <button type="button" class="btn" (click)="exportYandex()" [disabled]="busy()">
+        Скачать прайс
+      </button>
+      <label class="btn btn--file" [class.is-disabled]="busy()">
+        Загрузить прайс
+        <input
+          type="file"
+          accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          (change)="onImportFile($event)"
+          [disabled]="busy()"
+          hidden
+        />
+      </label>
+      <a routerLink="/manage/products/new" class="btn btn--primary">+ Добавить</a>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="notice notice--error">{{ error() }}</div>
+  }
+  @if (notice()) {
+    <div class="notice notice--ok">{{ notice() }}</div>
+  }
+
+  <div class="panel">
+    @if (loading()) {
+      <p class="empty">Загрузка…</p>
+    } @else if (!items().length) {
+      <p class="empty">Товаров пока нет</p>
+    } @else {
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Название</th>
+            <th>Артикул</th>
+            <th>Цена</th>
+            <th>На главной</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of items(); track item.id) {
+            <tr>
+              <td>
+                <img class="thumb" [src]="item.image_url" [alt]="item.name" />
+              </td>
+              <td>
+                <a [routerLink]="['/manage/products', item.id]">{{ item.name }}</a>
+                <div class="meta">{{ item.material_label }}</div>
+              </td>
+              <td>{{ item.sku }}</td>
+              <td>{{ item.price | number }} ₽</td>
+              <td>{{ item.featured ? 'Да' : '—' }}</td>
+              <td class="actions">
+                <a [routerLink]="['/manage/products', item.id]">Изменить</a>
+                <button type="button" class="link-danger" (click)="remove(item)">Удалить</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>

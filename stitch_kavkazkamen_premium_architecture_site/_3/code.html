@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KavkazKamen — Памятники и мемориальные комплексы из гранита</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "background": "#fdf8f8",
+                        "on-tertiary-fixed": "#410006",
+                        "tertiary-fixed": "#ffdad8",
+                        "on-secondary-container": "#67645e",
+                        "tertiary-fixed-dim": "#ffb3b0",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#842226",
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f4f0ef",
+                        "surface-container-highest": "#e5e2e1",
+                        "on-surface-variant": "#444748",
+                        "surface-dim": "#ddd9d8",
+                        "on-primary-fixed": "#1b1c1c",
+                        "on-secondary-fixed": "#1d1b17",
+                        "inverse-surface": "#313030",
+                        "surface-container-low": "#f7f3f2",
+                        "surface-container": "#f1edec",
+                        "outline-variant": "#c4c7c7",
+                        "secondary-container": "#e8e2db",
+                        "primary": "#0d0d0d",
+                        "on-background": "#1c1b1b",
+                        "on-tertiary-container": "#dd6463",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#cbc6bf",
+                        "surface-container-high": "#ebe7e7",
+                        "tertiary": "#260002",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "secondary": "#615e59",
+                        "surface-variant": "#e5e2e1",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fdf8f8",
+                        "primary-container": "#232323",
+                        "on-secondary-fixed-variant": "#494641",
+                        "primary-fixed": "#e5e2e1",
+                        "inverse-primary": "#c8c6c5",
+                        "on-primary-fixed-variant": "#474746",
+                        "surface": "#fdf8f8",
+                        "on-surface": "#1c1b1b",
+                        "secondary-fixed": "#e8e2db",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#4f0009",
+                        "surface-tint": "#5f5e5e",
+                        "on-primary-container": "#8b8a8a",
+                        "primary-fixed-dim": "#c8c6c5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px",
+                        "grid-column-count": "12",
+                        "section-padding": "120px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-lg": ["EB Garamond", "serif"],
+                        "headline-lg-mobile": ["EB Garamond", "serif"],
+                        "headline-md": ["EB Garamond", "serif"],
+                        "label-caps": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "display-xl": ["EB Garamond", "serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0", "fontWeight": "400"}],
+                        "headline-lg": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["40px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0", "fontWeight": "400"}],
+                        "display-xl": ["84px", {"lineHeight": "92px", "letterSpacing": "-0.03em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .stone-shimmer:hover::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-25deg);
+            animation: shimmer 0.8s ease-out;
+        }
+        @keyframes shimmer {
+            100% { left: 150%; }
+        }
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .map-container {
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 transition-all duration-500 bg-surface/80 backdrop-blur-md border-b border-secondary-container flex justify-between items-center px-margin-desktop py-6 max-w-full" id="top-nav">
+<div class="font-headline-md text-headline-md uppercase tracking-widest text-primary">KavkazKamen</div>
+<nav class="hidden md:flex gap-8 items-center">
+<a class="font-label-caps text-label-caps text-secondary hover:text-primary transition-colors duration-300" href="#catalog">Catalog</a>
+<a class="font-label-caps text-label-caps text-secondary hover:text-primary transition-colors duration-300" href="#works">Our Works</a>
+<a class="font-label-caps text-label-caps text-secondary hover:text-primary transition-colors duration-300" href="#production">Production</a>
+<a class="font-label-caps text-label-caps text-secondary hover:text-primary transition-colors duration-300" href="#contacts">Contacts</a>
+</nav>
+<button class="bg-primary text-on-primary px-8 py-3 font-label-caps text-label-caps hover:bg-[#6E1118] transition-colors duration-400">Consultation</button>
+</header>
+<!-- Hero Section -->
+<section class="relative h-screen w-full flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img alt="Stone Craftsmanship" class="w-full h-full object-cover filter brightness-50" data-alt="A cinematic close-up shot of a skilled stone artisan polishing a massive piece of premium dark granite in a dimly lit, high-end masonry workshop. Bright orange sparks dance across the textured gray stone surface as the grinding tool makes contact, captured with a shallow depth of field. The lighting is dramatic and focused, highlighting the raw mineral textures and the craftsmanship. The atmosphere is professional, expensive, and deeply respectful, reflecting a legacy of monument creation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwRz0YX83zc4mMxH5ORj_FQMrgtVV1puzInqqXmD_Rlgi-fQ0qkiVa1pmCIZEdoMlP3tMuv_QTTg-g5c-flqB8Mm_T0L7InLbQmUtfctOXj5iB5XVfvlYMMa1M_POn3Va8QEckOP15PVX2ud6qwlLnlfv-PJhwZ3LaeXURya8a05FXHXbaQP3gl9u3zXWgftAOuV7LgYsR7jC78ZJev8qOY_mBOSx7dr0jVpodZ8m6WdLt1MR0PySMH_T_tMqq7T5G5-GBYv6h_9g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+</div>
+<div class="relative z-10 px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-2 items-center gap-20">
+<div class="max-w-3xl">
+<h1 class="font-headline-lg text-headline-lg text-white mb-6 animate-fade-in">Памятники и мемориальные комплексы из гранита и мрамора</h1>
+<p class="font-body-lg text-white/80 mb-10 max-w-2xl">Более 25 лет создаём достойные места памяти по всему Кавказу и России с почтением к традициям и вниманием к каждой детали.</p>
+<div class="flex flex-wrap gap-4 mb-12">
+<div class="flex items-center gap-2 text-white/90">
+<span class="material-symbols-outlined text-[#B79A72]">verified</span>
+<span class="font-label-caps text-label-caps">Собственное производство</span>
+</div>
+<div class="flex items-center gap-2 text-white/90">
+<span class="material-symbols-outlined text-[#B79A72]">architecture</span>
+<span class="font-label-caps text-label-caps">Установка под ключ</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-6">
+<button class="bg-[#B79A72] text-on-primary px-10 py-5 font-label-caps text-label-caps transition-all hover:bg-white hover:text-primary">Получить каталог</button>
+<button class="border border-[#B79A72] text-white px-10 py-5 font-label-caps text-label-caps hover:bg-[#B79A72] transition-all">Рассчитать стоимость</button>
+</div>
+</div>
+<!-- Minimalist Architectural Map moved to Hero -->
+<div class="hidden lg:flex flex-col items-center justify-center relative animate-fade-in">
+<div class="absolute -top-16 right-0 text-right text-white">
+<div class="font-display-xl text-[64px] text-[#B79A72] leading-none">25+</div>
+<div class="font-label-caps text-label-caps opacity-70">лет опыта на Кавказе</div>
+</div>
+<div class="relative w-full max-w-md aspect-square bg-white/5 backdrop-blur-sm rounded-full border border-white/10 flex items-center justify-center overflow-hidden map-container">
+<div class="absolute inset-0 opacity-20 grayscale invert">
+<svg class="w-full h-full fill-white" viewbox="0 0 800 600">
+<path d="M150,100 Q200,50 300,80 T500,120 T700,100 V500 Q600,550 400,520 T150,500 Z"></path>
+</svg>
+</div>
+<div class="relative z-10 grid grid-cols-3 gap-10">
+<div class="group/map flex flex-col items-center gap-2 cursor-pointer transition-all hover:scale-110">
+<div class="w-2 h-2 rounded-full bg-[#B79A72] shadow-[0_0_15px_#B79A72]"></div>
+<span class="font-label-caps text-[10px] tracking-[0.2em] text-white/60 group-hover/map:text-white">KRASNODAR</span>
+</div>
+<div class="group/map flex flex-col items-center gap-2 cursor-pointer transition-all hover:scale-110">
+<div class="w-2 h-2 rounded-full bg-[#B79A72] shadow-[0_0_15px_#B79A72]"></div>
+<span class="font-label-caps text-[10px] tracking-[0.2em] text-white/60 group-hover/map:text-white">STAVROPOL</span>
+</div>
+<div class="group/map flex flex-col items-center gap-2 cursor-pointer transition-all hover:scale-110">
+<div class="w-2 h-2 rounded-full bg-white shadow-[0_0_15px_white]"></div>
+<span class="font-label-caps text-[10px] tracking-[0.2em] text-white/60 group-hover/map:text-white">MOSCOW</span>
+</div>
+<div class="group/map flex flex-col items-center gap-2 cursor-pointer transition-all hover:scale-110">
+<div class="w-2 h-2 rounded-full bg-[#B79A72] shadow-[0_0_15px_#B79A72]"></div>
+<span class="font-label-caps text-[10px] tracking-[0.2em] text-white/60 group-hover/map:text-white">GROZNY</span>
+</div>
+<div class="group/map flex flex-col items-center gap-2 cursor-pointer transition-all hover:scale-110">
+<div class="w-2 h-2 rounded-full bg-[#B79A72] shadow-[0_0_15px_#B79A72]"></div>
+<span class="font-label-caps text-[10px] tracking-[0.2em] text-white/60 group-hover/map:text-white">NALCHIK</span>
+</div>
+<div class="group/map flex flex-col items-center gap-2 cursor-pointer transition-all hover:scale-110">
+<div class="w-2 h-2 rounded-full bg-[#B79A72] shadow-[0_0_15px_#B79A72]"></div>
+<span class="font-label-caps text-[10px] tracking-[0.2em] text-white/60 group-hover/map:text-white">MAKHACHKALA</span>
+</div>
+</div>
+</div>
+<div class="absolute -bottom-12 right-0 text-right text-white">
+<div class="font-display-xl text-[64px] text-[#B79A72] leading-none">5000+</div>
+<div class="font-label-caps text-label-caps opacity-70">выполненных работ</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Proof / Logo Strip -->
+<section class="py-12 bg-surface-container border-b border-outline-variant">
+<div class="px-margin-desktop flex flex-wrap justify-between items-center gap-12 opacity-40 grayscale">
+<div class="font-headline-md italic">Municipal Partner</div>
+<div class="font-headline-md italic">Federal Memorial</div>
+<div class="font-headline-md italic">South Region Trust</div>
+<div class="font-headline-md italic">Heritage Found</div>
+<div class="font-headline-md italic">National Stone Assoc.</div>
+</div>
+</section>
+<!-- Catalog Grid -->
+<section class="py-section-padding px-margin-desktop" id="catalog">
+<div class="flex justify-between items-end mb-16">
+<div>
+<span class="text-[#B79A72] font-label-caps text-label-caps block mb-4 uppercase tracking-[0.2em]">Каталог изделий</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">Материалы и формы</h2>
+</div>
+<a class="font-label-caps text-label-caps border-b border-primary pb-1 hover:text-[#B79A72] hover:border-[#B79A72] transition-all" href="#">Смотреть все 1240 моделей</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="group relative aspect-[3/4] bg-surface-container overflow-hidden cursor-pointer stone-shimmer">
+<img alt="Granite Monuments" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3TQzYLSdzTQdNcPY6wjwxodpJa75sDp0ERJGMEq6VSWhAaSauc8QElqTGJv1tM2IBG2fzfW4_R26FMZNSAdQW6kqSG3mtl8fORv0oRPQtVhODMtwykuZ4ywctIoO8G0rVx_QAaZR7OIsiGyaAiAJRC5__hbHWGIIjkcp0EmdMKV1XyAr3PQpiMN-WeYxQvO4xerRyZFeF80lDyupwaZh7ayfRbRpMCmZ8l7ViHcBmRER1uhEPzsjv4DAV9tozO4mIAGifKhqyYZc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-2">Гранитные памятники</h3>
+<p class="text-white/60 font-label-caps text-label-caps group-hover:text-white transition-colors">От 24 500 ₽</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative aspect-[3/4] bg-surface-container overflow-hidden cursor-pointer stone-shimmer">
+<img alt="Marble Monuments" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4vi7RU0renb3O2z4a6180C2jrYxEOz5_6hxL84USwMPoGv5NTWFHlxo3z7Z9ZIOS8os4njMxQJGvh-Cwectw8DQSg7GV0YhsWnwVyaBuWS2r6Ef4VNBAJlq-oW2gY3ijOaNSdr2GTrviE-40ILacY7ix9AaDJ7emkgef3A0CjCRQSHBRnX35sm_hVAS8600BkQEouU92HJ50IcOAnTaOpcewdaktCg2_3cdfbTYBzYEKylxD5wJkqh8YqRe4ARdxKQhPZKXZTFIU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-2">Мраморные памятники</h3>
+<p class="text-white/60 font-label-caps text-label-caps group-hover:text-white transition-colors">От 18 200 ₽</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative aspect-[3/4] bg-surface-container overflow-hidden cursor-pointer stone-shimmer">
+<img alt="SVO Monuments" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgvw2kR9xjYR1qZFqAw6VLhSVTBRdkhzWSCN-es1BE7vQexs0NZLlAffScbIJFRwx5P_JgJ_yaD3V4xMnYmaHlGEz0egw6SMmMW2JA_F7rbz229ankKaQponl19MUwaiPwpPmnXXvGjAilZY5JlP1xBg63uZPV1gZ5uxYvGCKQGakjGcxS9neLa_d0UvkWxoPpGwHAXb4cCHbelFPZS6eLFeO-pQ0x_BxHUCseTGQ6BVkn8liYZRm3TK6MKZgnA2qDlroxu4LXlKE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-2">Памятники СВО</h3>
+<p class="text-white/60 font-label-caps text-label-caps group-hover:text-white transition-colors">Особые условия</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative aspect-[3/4] bg-surface-container overflow-hidden cursor-pointer stone-shimmer">
+<img alt="Elite Monuments" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBp5PNc0_Q_J0U4AUnI6Bi8JHDBXek3hIovTRXhli0LqGnhMtPkj-81Zl6gODI-2-0yHx4uht_zs8dM9HRITKVTFVtmBEEpT_z_11jBJmLUL_9MG0K0nqPspCdhpbcyC0zD0bqAf5B1Hdn1_IgUvw-Lbe42nrRmA_KBDaDc2ui0w5tVr57iRzhOJdM86HsVk1ap2Ur_uys-5qM6U8n8_ngjZSjPhDKJx9XZTcLSUWfEV34QxiM1Gu8DSHtIsVL1kPqtXeEMW77Xd34"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-2">Элитные комплексы</h3>
+<p class="text-white/60 font-label-caps text-label-caps group-hover:text-white transition-colors">Индивидуальный расчет</p>
+</div>
+</div>
+<!-- Card 5-8 repeated logic with different images -->
+<div class="group relative aspect-[3/4] bg-surface-container overflow-hidden cursor-pointer stone-shimmer">
+<img alt="Complexes" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4h5JhDoR0ewMckclMdty7-fbITvgRzr4zwiz3LA-ZKJVLZsYBETjxudVXsJ2WQ618f98KiiotzdeYVv1_JY-qSQMpe_NFYy-opTSI_kM_Olf7OaHulyW_SrK3K2-XRI2czHwcbLRyE0EEMFrzegF1SrUo2PLggDzAA4jb8iHiSHTs6-5CPV9HuVWO8A9CNdQCqWLU5bJtYNHKjEOC2D2pxVt-5LlxkajAlQfEn2PwivSPq7P9_K3NHOe6IEg9NNTCvkSVnxEv58I"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-2">Комплексы</h3>
+</div>
+</div>
+<div class="group relative aspect-[3/4] bg-surface-container overflow-hidden cursor-pointer stone-shimmer">
+<img alt="Fences" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7nH0LI94ESq3j3OyiL9ZuugbtVnPNZNizKd1vazLoo1wVAHFv_FldH0lsJA9c-r2lsEzLPWDGR8onJylFsPePq0scU4rRmYoxLACoAhQiAq80CZkpm8sO074UjF-DsM-8BGdfYfPT_XIXjMK5RvHi-i6NBKZHKWGe1PF-I-d3tlS4_Pave73mUFKohkmtXmViTuTe2ktXg99sAIqV2H5yEzSKLTsCujbxen9PDN_kGzpfZlsnEcThm2sGNJwLdzKT0VovrC82Wdg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-2">Ограды</h3>
+</div>
+</div>
+<div class="group relative aspect-[3/4] bg-surface-container overflow-hidden cursor-pointer stone-shimmer">
+<img alt="Benches" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYYSAa2fpWLt5gD3bpq4IphsJKDdLjuwnMx_vMLvRr52-dyuvH1qNXl-DV8xEigPycbatmy-GDPDJKnx9dPhcFe9lAa570L4UezHkuZZ69cQ5MjdzejJIcoi_285P2l1YPFDzoZrltTmgu56JxWhlaaNvMgxMaCZtatm1BpU0XUHf65xuhx6piM80S9lBYlHrZzZwkOuoq6jAyNdvAxLj6TNLJn2y_9nF9AOL-sdYwIjrBSKbh0q9VSAbK-eFt69lZP_JWy1ZQXQQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-2">Лавочки</h3>
+</div>
+</div>
+<div class="group relative aspect-[3/4] bg-surface-container overflow-hidden cursor-pointer stone-shimmer">
+<img alt="Vases" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiNzjmT1BY_X6XziiUhNCwuSSN5oMgqySWrWInariuyxm8Xs_B2dB1DyPbw2yoQ5dvgn38aHiqWP_dU8EUOyBiVNANSu11fGhNRIikG0SqqguykyGKc1pEI6T1YARr_YUUPgd5gGfgF-36TkamIDsLZBRWco9yZIeajPDdQJn5-RePmUZ2eX36KDNqeQWPaPnPApfc6qSL9OPqECgPvcSStqzDrlFtFDnnoKQe9XpDBR3Vd1-d1calMLXpjwOvpV_Lw2yrGluyuwE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
+<div class="absolute bottom-0 left-0 p-8">
+<h3 class="text-white font-headline-md text-headline-md mb-2">Вазоны</h3>
+</div>
+</div>
+</div>
+</section>
+<!-- Reviews Section -->
+<section class="py-section-padding bg-surface-container-low" id="reviews">
+<div class="px-margin-desktop">
+<div class="text-center mb-16">
+<span class="text-[#B79A72] font-label-caps text-label-caps block mb-4 uppercase tracking-[0.2em]">Отзывы клиентов</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">Ваше доверие — наша главная ценность</h2>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Video Review -->
+<div class="bg-white p-6 shadow-sm border border-outline-variant relative group">
+<div class="aspect-video bg-primary flex items-center justify-center relative mb-6 overflow-hidden">
+<img alt="Video Review" class="w-full h-full object-cover opacity-50 grayscale group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4h5JhDoR0ewMckclMdty7-fbITvgRzr4zwiz3LA-ZKJVLZsYBETjxudVXsJ2WQ618f98KiiotzdeYVv1_JY-qSQMpe_NFYy-opTSI_kM_Olf7OaHulyW_SrK3K2-XRI2czHwcbLRyE0EEMFrzegF1SrUo2PLggDzAA4jb8iHiSHTs6-5CPV9HuVWO8A9CNdQCqWLU5bJtYNHKjEOC2D2pxVt-5LlxkajAlQfEn2PwivSPq7P9_K3NHOe6IEg9NNTCvkSVnxEv58I"/>
+<span class="material-symbols-outlined text-white text-[64px] absolute z-10 cursor-pointer hover:scale-110 transition-transform">play_circle</span>
+</div>
+<h4 class="font-headline-md text-[20px] mb-2">Елена М.</h4>
+<p class="font-body-md text-secondary mb-4 italic">"Спасибо большое всей команде за чуткое отношение. Мемориал получился именно таким, как мы представляли..."</p>
+<div class="flex items-center gap-1 text-[#B79A72]">
+<span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span>
+</div>
+</div>
+<!-- Text Review with Photo -->
+<div class="bg-white p-6 shadow-sm border border-outline-variant">
+<div class="aspect-square bg-surface-container mb-6 overflow-hidden">
+<img alt="Installation photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN6hHBZXz_NvRLR6tY9fxdbeK1L5FjeodbV3VvazlazEptbNIiFZX6Ka1A1CrbgaF4cs0HcTBH2w04milWXmEkWjRWxnj2hojFDRxRSV4wXHX-lZUV9QRQrxTkqeKFzqjsn2_mFbR7g1g2kWc5-7P2pGYw5zBMRDVdRk5vJOg6YcoSq_JqRiI8Ezbw5hwMDB9miMC_qjrdJrVq89v3YsiBkkntWH3OOcPq1TQWAKI3g2o9Mi7FlnomAo3JbKoHZWcE6hvzr07pEOQ"/>
+</div>
+<h4 class="font-headline-md text-[20px] mb-2">Алексей Петрович</h4>
+<p class="font-body-md text-secondary mb-4">"Качество гранита потрясающее. Установили точно в срок, несмотря на сложные погодные условия. Рекомендую KavkazKamen всем."</p>
+<div class="flex items-center gap-1 text-[#B79A72]">
+<span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span>
+</div>
+</div>
+<!-- Text Review with Photo -->
+<div class="bg-white p-6 shadow-sm border border-outline-variant">
+<div class="aspect-square bg-surface-container mb-6 overflow-hidden">
+<img alt="Installation photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPUpSxVEiWrZ5nRDYib7_GbckxgGwgMqe5JxwSi62kfRnwwWzLGuBPwSFtDYG0OjUomM57Jy8pqvseGWZK66AYWo28WWf4R5sxJ6TMsbMarH-nIqBnALTyiMG4mhn32cm0WSqi_xkw5uTkPJUDru1migt9HzYf_M2i02zJ8_rnED-LEoEQTtC8-DADEEUKd5WDwifyKXqcVh7qmtwQEUpmwn8wf1IUQPqYIZ1oOax__-biwNRcUlv07bxzsxQA1BpcC4P3PhBusCk"/>
+</div>
+<h4 class="font-headline-md text-[20px] mb-2">Семья Каримовых</h4>
+<p class="font-body-md text-secondary mb-4">"Очень довольны художественной гравировкой. Лицо на камне получилось как живое. Спасибо мастерам!"</p>
+<div class="flex items-center gap-1 text-[#B79A72]">
+<span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span><span class="material-symbols-outlined fill-1">star</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Works Gallery -->
+<section class="py-section-padding px-margin-desktop" id="works">
+<div class="mb-16">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center">Наши работы</h2>
+<p class="text-center text-secondary max-w-2xl mx-auto mt-4">Каждый проект — это уникальная история, воплощенная в камне с высочайшей точностью и уважением.</p>
+</div>
+<div class="columns-1 md:columns-2 lg:columns-3 gap-gutter space-y-gutter">
+<div class="break-inside-avoid group relative overflow-hidden">
+<img alt="Work 1" class="w-full grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN6hHBZXz_NvRLR6tY9fxdbeK1L5FjeodbV3VvazlazEptbNIiFZX6Ka1A1CrbgaF4cs0HcTBH2w04milWXmEkWjRWxnj2hojFDRxRSV4wXHX-lZUV9QRQrxTkqeKFzqjsn2_mFbR7g1g2kWc5-7P2pGYw5zBMRDVdRk5vJOg6YcoSq_JqRiI8Ezbw5hwMDB9miMC_qjrdJrVq89v3YsiBkkntWH3OOcPq1TQWAKI3g2o9Mi7FlnomAo3JbKoHZWE6hvzr07pEOQ"/>
+<div class="mt-4">
+<h4 class="font-headline-md text-[20px]">Мемориал "Вечность"</h4>
+<div class="flex justify-between text-secondary text-sm mt-1">
+<span class="">Габбро-диабаз</span>
+<span class="">Ростов-на-Дону</span>
+</div>
+</div>
+</div>
+<div class="break-inside-avoid group relative overflow-hidden">
+<img alt="Work 2" class="w-full grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPUpSxVEiWrZ5nRDYib7_GbckxgGwgMqe5JxwSi62kfRnwwWzLGuBPwSFtDYG0OjUomM57Jy8pqvseGWZK66AYWo28WWf4R5sxJ6TMsbMarH-nIqBnALTyiMG4mhn32cm0WSqi_xkw5uTkPJUDru1migt9HzYf_M2i02zJ8_rnED-LEoEQTtC8-DADEEUKd5WDwifyKXqcVh7qmtwQEUpmwn8wf1IUQPqYIZ1oOax__-biwNRcUlv07bxzsxQA1BpcC4P3PhBusCk"/>
+<div class="mt-4">
+<h4 class="font-headline-md text-[20px]">Семейный пантеон</h4>
+<div class="flex justify-between text-secondary text-sm mt-1">
+<span class="">Дымовский гранит</span>
+<span class="">Пятигорск</span>
+</div>
+</div>
+</div>
+<div class="break-inside-avoid group relative overflow-hidden">
+<img alt="Work 3" class="w-full grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYoPwnCCjt-5aoY6OCp2KRUxppKw13FSoECaWDOdKFCOLyqvzp07L3VAZhKb6WdtwPF70Z8Xmz6IjyWa6jFZ_3HMfeo07WHYvcKM3LZSlcHF_khbPSmzTJWqresH5ew1lopz8CsfDe49mvE4IYCZNO4s7rzKYD2ESxeHTc_W6Hz0jDOGFExcYDD2H_xyy061Ioquh_nBt7p8vRaSOr4oLoT0ZhLIjDDAlSkkjm8th8Zxajb9T6VjCRpcgg3vv0l8oThe4C8pQCQtE"/>
+<div class="mt-4">
+<h4 class="font-headline-md text-[20px]">Авторский проект</h4>
+<div class="flex justify-between text-secondary text-sm mt-1">
+<span class="">Мрамор Koelga</span>
+<span class="">Москва</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Block / Bento Grid Style -->
+<section class="bg-primary text-on-primary py-section-padding">
+<div class="px-margin-desktop">
+<h2 class="font-headline-lg text-headline-lg mb-16 text-center">Почему нам доверяют поколения</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="p-12 border border-secondary/30 flex flex-col justify-between h-[400px]">
+<span class="material-symbols-outlined text-display-xl text-[#B79A72]">history_edu</span>
+<div>
+<h3 class="font-headline-md text-headline-md mb-4">25 лет опыта</h3>
+<p class="font-body-md opacity-70">Четверть века мы совершенствуем мастерство обработки натурального камня, сохраняя память в камне на века.</p>
+</div>
+</div>
+<div class="p-12 border border-secondary/30 flex flex-col justify-between h-[400px] bg-secondary-container/10">
+<span class="material-symbols-outlined text-display-xl text-[#B79A72]">factory</span>
+<div>
+<h3 class="font-headline-md text-headline-md mb-4">Собственный завод</h3>
+<p class="font-body-md opacity-70">Никаких посредников. Полный цикл от распила блоков до художественной гравировки на профессиональном ЧПУ оборудовании.</p>
+</div>
+</div>
+<div class="p-12 border border-secondary/30 flex flex-col justify-between h-[400px]">
+<span class="material-symbols-outlined text-display-xl text-[#B79A72]">map</span>
+<div>
+<h3 class="font-headline-md text-headline-md mb-4">Доставка по РФ</h3>
+<p class="font-body-md opacity-70">Собственный автопарк и отработанная логистика позволяют доставлять памятники в любую точку России в полной сохранности.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Process Timeline -->
+<section class="py-section-padding bg-secondary-container">
+<div class="px-margin-desktop">
+<h2 class="font-headline-lg text-headline-lg text-center mb-24">7 шагов к безупречному результату</h2>
+<div class="relative">
+<div class="absolute left-1/2 -translate-x-1/2 h-full w-[1px] bg-[#B79A72]/30 hidden md:block"></div>
+<div class="space-y-24">
+<!-- Step 1 -->
+<div class="flex flex-col md:flex-row items-center gap-12 group">
+<div class="md:w-1/2 md:text-right">
+<span class="text-display-xl text-[#B79A72]/20 font-display-xl block">01</span>
+<h3 class="font-headline-md text-headline-md mt-[-2rem]">Консультация</h3>
+<p class="text-secondary max-w-sm ml-auto mt-4">Обсуждаем ваши пожелания, подбираем материал и фиксируем бюджет. Помогаем определиться с концепцией.</p>
+</div>
+<div class="w-12 h-12 bg-[#B79A72] shrink-0 z-10 hidden md:block"></div>
+<div class="md:w-1/2"></div>
+</div>
+<!-- Step 4 (Alternating) -->
+<div class="flex flex-col md:flex-row-reverse items-center gap-12 group">
+<div class="md:w-1/2 text-left">
+<span class="text-display-xl text-[#B79A72]/20 font-display-xl block">04</span>
+<h3 class="font-headline-md text-headline-md mt-[-2rem]">Изготовление</h3>
+<p class="text-secondary max-w-sm mt-4">Резка камня на ЧПУ станках, ручная доработка мастерами и художественная гравировка портретов.</p>
+</div>
+<div class="w-12 h-12 bg-[#B79A72] shrink-0 z-10 hidden md:block"></div>
+<div class="md:w-1/2"></div>
+</div>
+<!-- Step 7 -->
+<div class="flex flex-col md:flex-row items-center gap-12 group">
+<div class="md:w-1/2 md:text-right">
+<span class="text-display-xl text-[#B79A72]/20 font-display-xl block">07</span>
+<h3 class="font-headline-md text-headline-md mt-[-2rem]">Сдача объекта</h3>
+<p class="text-secondary max-w-sm ml-auto mt-4">Финальная проверка качества, подписание акта и предоставление долгосрочной гарантии.</p>
+</div>
+<div class="w-12 h-12 bg-[#B79A72] shrink-0 z-10 hidden md:block"></div>
+<div class="md:w-1/2"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Calculator Block -->
+<section class="py-section-padding px-margin-desktop bg-white">
+<div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-20">
+<div class="lg:w-1/2">
+<h2 class="font-headline-lg text-headline-lg mb-8">Рассчитайте стоимость онлайн за 1 минуту</h2>
+<p class="text-secondary mb-10">Ответьте на 4 вопроса, и наш менеджер подготовит предварительную смету со скидкой 10% на первый заказ.</p>
+<div class="space-y-8">
+<div>
+<p class="font-label-caps text-label-caps mb-4">1. Выберите тип памятника</p>
+<div class="grid grid-cols-2 gap-4">
+<button class="border border-outline p-4 hover:border-[#B79A72] hover:bg-secondary-container transition-all text-left">Одиночный</button>
+<button class="border border-outline p-4 hover:border-[#B79A72] hover:bg-secondary-container transition-all text-left">Двойной</button>
+</div>
+</div>
+<div>
+<p class="font-label-caps text-label-caps mb-4">2. Материал изделия</p>
+<div class="grid grid-cols-2 gap-4">
+<button class="border border-outline p-4 hover:border-[#B79A72] hover:bg-secondary-container transition-all text-left">Гранит (Премиум)</button>
+<button class="border border-outline p-4 hover:border-[#B79A72] hover:bg-secondary-container transition-all text-left">Мрамор (Классика)</button>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-6 mt-12 font-label-caps text-label-caps flex items-center justify-center gap-4 hover:bg-[#6E1118] transition-all">
+                    ПОЛУЧИТЬ РАСЧЕТ В WHATSAPP
+                    <span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<div class="lg:w-1/2 relative">
+<img alt="Calculator Background" class="w-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhsSbLc7whcaIEezInSAoUK8Qdh4L8-SIEv5kkRIO_USKVZB7g7U4oxQcNy9svLUFNzop2Y-V5jTciLChzpPMKW67oDXni20seW_nT1aJ_rKjAhmr8bRrVNepZ_uiDP5dZWVda9Ez19lWL6cA7Hn27upAPgVUe8Y79sjDMJgnhSMYvdhOaaHMugOzmAF2W2Ikp6pnbNHaa999pS2SAbZ3Lm5AT32-lJQRJzzxU9N-27KTVtcGiCx5DiUq_6u9MIxITFhetN5ORido"/>
+<div class="absolute -bottom-10 -left-10 bg-[#B79A72] text-white p-10 hidden md:block">
+<p class="font-headline-md text-[24px] mb-2 italic">"Цена фиксируется в договоре и не меняется"</p>
+<span class="font-label-caps text-label-caps opacity-80">— Главный инженер</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Material Comparison -->
+<section class="py-section-padding bg-surface-container-high overflow-x-auto">
+<div class="px-margin-desktop max-w-6xl mx-auto">
+<h2 class="font-headline-lg text-headline-lg text-center mb-16">Сравнение материалов</h2>
+<table class="w-full min-w-[800px]">
+<thead class="font-label-caps text-label-caps text-secondary">
+<tr class="border-b border-outline-variant">
+<th class="py-6 text-left">Характеристика</th>
+<th class="py-6 text-left text-primary font-bold">Гранит (Рекомендуем)</th>
+<th class="py-6 text-left">Мрамор</th>
+<th class="py-6 text-left">Литьевой мрамор</th>
+<th class="py-6 text-left">Полимергранит</th>
+</tr>
+</thead>
+<tbody class="font-body-md">
+<tr class="border-b border-outline-variant">
+<td class="py-6">Срок службы</td>
+<td class="py-6 text-primary font-bold">500+ лет</td>
+<td class="py-6">100+ лет</td>
+<td class="py-6">15-20 лет</td>
+<td class="py-6">10 лет</td>
+</tr>
+<tr class="border-b border-outline-variant">
+<td class="py-6">Устойчивость к климату</td>
+<td class="py-6 text-primary font-bold">Абсолютная</td>
+<td class="py-6">Средняя</td>
+<td class="py-6">Низкая</td>
+<td class="py-6">Низкая</td>
+</tr>
+<tr class="border-b border-outline-variant">
+<td class="py-6">Уход</td>
+<td class="py-6 text-primary font-bold">Не требуется</td>
+<td class="py-6">Ежегодный</td>
+<td class="py-6">Специальный</td>
+<td class="py-6">Невозможен</td>
+</tr>
+<tr class="border-b border-outline-variant">
+<td class="py-6">Цена/Качество</td>
+<td class="py-6 text-primary font-bold">Идеальное</td>
+<td class="py-6">Высокое</td>
+<td class="py-6">Низкое</td>
+<td class="py-6">Низкое</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- SVO Block -->
+<section class="py-section-padding bg-primary text-on-primary">
+<div class="px-margin-desktop text-center">
+<span class="text-[#B79A72] font-label-caps text-label-caps block mb-6 uppercase tracking-[0.3em]">Память героев</span>
+<h2 class="font-headline-lg text-headline-lg mb-8 max-w-3xl mx-auto">Мемориалы участникам СВО</h2>
+<p class="text-secondary-fixed-dim max-w-2xl mx-auto mb-16">Изготавливаем строгие и достойные памятники с воинской символикой. Особые льготные условия и приоритетные сроки исполнения для семей военнослужащих.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="aspect-square bg-surface-container/10 border border-secondary/20 overflow-hidden relative group">
+<img alt="Military 1" class="w-full h-full object-cover opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpffnJ7IdJF85yY0vNiExFVcjvOj-C3z3NaBoRMWYN7ubUlJQHYyn_1P9CiBwoBdmjjMkfDZKVTdLup4JL5tzlQaQ71daZEIzFQCML76UDpisFSzYMQXsdGBvGu9y1gOpcBUQGg9kuEho8ohGYQZ3K6tuGM36CJ-HGvsX-IcXjSiV_AjfjK8rQkKy7bFoPyiM_99bHGt_PGB3Gjjob9YjidiFCuhQvrKb5mZsMHOLWxUxYu-AhQy6WPBEJ2x3Ad4wleAAZB1O4Z98"/>
+</div>
+<div class="aspect-square bg-surface-container/10 border border-secondary/20 overflow-hidden relative group">
+<img alt="Military 2" class="w-full h-full object-cover opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBih8Zly2__CJ3pLr-rcqSAziE1KSc31hs2DQ-SIn4DX0m2prso1YGSEL_JIH4LKKd0hbmURyVbxeGDJS3QR56BOnTRI8D08OWyxu7L9_0DxKKPm1jgThGEgyvhxv4FgM4KeONyDn8LHbrNvx_opfTbZ4XRkyFFy1l1ebX2zpicRs7RFwkWRpwzAt6msc2_NrgwYRjfKk3osO5fr3IuZv3oAApoSJ4z0cMwXsYSr0R5FIA8VhnwAD-ecZqE8ws9Gohd_lfw5PrsUdY"/>
+</div>
+<div class="aspect-square bg-surface-container/10 border border-secondary/20 overflow-hidden relative group">
+<img alt="Military 3" class="w-full h-full object-cover opacity-50 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjaeXlToBW80wZQ5d6mXqWU2uT06YVSu0-q_zbLPJOQvIUXcuiVT1KDndMbvpkqVVOYPDR2b-QsE2pCAbK3UKBQUhD5US4E56G6Pu4xrHnUqqNpvqokVWLSJ-o0pcfHogxnmkug2XR0Qzpj8j6n_f94T4NJHNlH85Xtv394pfte1043RIrU_01bMh7M_jgnMTeEFd-Lh7SlSIijX9ILcGvrgUXN1oZVrSuqkArByAoDyMEkdzyYS5QPRX3tcUYUVseVJGfP2ZlLJM"/>
+</div>
+</div>
+<button class="mt-16 border-b border-[#B79A72] text-[#B79A72] font-label-caps text-label-caps pb-1 hover:text-white hover:border-white transition-all">Узнать о льготных программах</button>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-section-padding bg-surface border-t border-secondary-container">
+<div class="px-margin-desktop text-center max-w-4xl mx-auto">
+<h2 class="font-headline-lg text-headline-lg mb-8">Поможем достойно сохранить память о близком человеке</h2>
+<p class="text-secondary text-body-lg mb-12">Получите бесплатную консультацию дизайнера и каталог всех моделей 2024 года прямо сейчас.</p>
+<div class="flex flex-wrap justify-center gap-6">
+<button class="bg-[#25D366] text-white px-10 py-5 font-label-caps text-label-caps flex items-center gap-3 hover:scale-105 transition-transform">WHATSAPP</button>
+<button class="bg-[#0088cc] text-white px-10 py-5 font-label-caps text-label-caps flex items-center gap-3 hover:scale-105 transition-transform">TELEGRAM</button>
+<button class="bg-primary text-white px-10 py-5 font-label-caps text-label-caps hover:bg-[#6E1118] transition-all">ЗАКАЗАТЬ ЗВОНОК</button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-primary text-on-primary py-section-padding px-margin-desktop grid grid-cols-1 md:grid-cols-12 gap-gutter w-full">
+<div class="md:col-span-4">
+<div class="font-headline-md text-headline-md text-on-primary mb-6 uppercase tracking-widest">KavkazKamen</div>
+<p class="text-secondary-fixed-dim font-body-md mb-8 max-w-sm">Архитектурная обработка камня. Памятники, мемориалы и изделия из гранита высшей категории.</p>
+<p class="text-secondary-fixed-dim text-xs opacity-50">© 2024 KavkazKamen. Architectural Stone Craftsmanship.</p>
+</div>
+<div class="md:col-span-2">
+<h4 class="font-label-caps text-label-caps mb-6 text-[#B79A72]">Навигация</h4>
+<ul class="space-y-4 font-body-md text-secondary-fixed-dim">
+<li class=""><a class="hover:text-white transition-colors" href="#catalog">Catalog</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#works">Our Works</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#production">Production</a></li>
+</ul>
+</div>
+<div class="md:col-span-2">
+<h4 class="font-label-caps text-label-caps mb-6 text-[#B79A72]">Помощь</h4>
+<ul class="space-y-4 font-body-md text-secondary-fixed-dim">
+<li class=""><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">Terms of Service</a></li>
+<li class=""><a class="hover:text-white transition-colors" href="#">FAQ</a></li>
+</ul>
+</div>
+<div class="md:col-span-4 text-right">
+<h4 class="font-label-caps text-label-caps mb-6 text-[#B79A72]">Главный офис</h4>
+<p class="font-body-md text-secondary-fixed-dim mb-4">г. Пятигорск, ул. Камнетесов, д. 1</p>
+<p class="font-body-lg font-bold">8 (800) 555-00-00</p>
+<div class="flex justify-end gap-6 mt-8">
+<span class="material-symbols-outlined text-white hover:text-[#B79A72] cursor-pointer">public</span>
+<span class="material-symbols-outlined text-white hover:text-[#B79A72] cursor-pointer">share</span>
+<span class="material-symbols-outlined text-white hover:text-[#B79A72] cursor-pointer">chat</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions and scroll effects
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('top-nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('py-4', 'bg-white', 'shadow-sm');
+                nav.classList.remove('py-6', 'bg-surface/80');
+            } else {
+                nav.classList.add('py-6', 'bg-surface/80');
+                nav.classList.remove('py-4', 'bg-white', 'shadow-sm');
+            }
+        });
+
+        // Intersection Observer for fade-in effects
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-on-scroll').forEach(el => observer.observe(el));
+    </script>
+</body></html>

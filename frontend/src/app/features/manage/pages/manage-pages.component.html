@@ -1,0 +1,43 @@
+<div class="page">
+  <header class="page__head">
+    <h1>Страницы и блоки</h1>
+    <p>Тексты сайта по разделам. Откройте страницу — у каждого блока будет подсказка, какое фото туда грузить.</p>
+  </header>
+
+  <div class="toolbar">
+    <p>«Общие настройки сайта» — шапка, подвал и контакты. «Главная» — фото и тексты первого экрана.</p>
+    <a routerLink="/manage/pages/new" class="btn btn--primary">+ Новая страница</a>
+  </div>
+
+  @if (error()) {
+    <div class="notice notice--error">{{ error() }}</div>
+  }
+
+  <div class="panel">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Страница</th>
+          <th>Что редактировать</th>
+          <th>Блоков</th>
+          <th>Обновлена</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (page of items(); track page.slug) {
+          <tr>
+            <td>
+              <a [routerLink]="['/manage/pages', page.slug]"><strong>{{ page.title }}</strong></a>
+              <div class="meta">{{ page.slug }}</div>
+            </td>
+            <td class="hint-cell">{{ hint(page) }}</td>
+            <td>{{ page.blocks?.length || 0 }}</td>
+            <td>{{ page.updated_at | date: 'dd.MM.yyyy HH:mm' }}</td>
+            <td><a class="btn" [routerLink]="['/manage/pages', page.slug]">Открыть</a></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<app-header />
+<main class="legal-page page">
+  @if (page(); as document) {
+    <article class="legal-page__article container">
+      <header class="page-intro page-intro--section">
+        <h1 class="page-intro__title">{{ intro(document)?.title || document.title }}</h1>
+        <p class="page-intro__lead">{{ intro(document)?.body }}</p>
+      </header>
+
+      @for (section of sections(document); track section.key) {
+        <section class="legal-page__section">
+          <h2>{{ section.title }}</h2>
+          @for (p of paragraphs(section.body); track p) {
+            <p>{{ p }}</p>
+          }
+        </section>
+      }
+    </article>
+  } @else {
+    @if (fallback(); as document) {
+    <article class="legal-page__article container">
+      <header class="page-intro page-intro--section">
+        <h1 class="page-intro__title">{{ document.title }}</h1>
+        <p class="page-intro__lead">{{ document.lead }}</p>
+      </header>
+
+      @for (section of document.sections; track section.title) {
+        <section class="legal-page__section">
+          <h2>{{ section.title }}</h2>
+          @for (p of section.paragraphs; track p) {
+            <p>{{ p }}</p>
+          }
+          @if (section.list) {
+            <ul>
+              @for (item of section.list; track item) {
+                <li>{{ item }}</li>
+              }
+            </ul>
+          }
+        </section>
+      }
+    </article>
+    } @else if (!loading()) {
+    <div class="legal-page__missing container">
+      <h1>Документ не найден</h1>
+      <p>Запрашиваемая страница отсутствует.</p>
+      <a routerLink="/" class="btn btn--primary">На главную</a>
+    </div>
+    }
+  }
+</main>
+<app-footer />

@@ -1,0 +1,223 @@
+<app-header />
+<main class="home">
+  @if (cms.enabled('home', 'hero')) {
+  <section class="hero stone-surface">
+    <div class="hero__bg granite-surface granite-surface--dark"></div>
+    <div class="hero__grid">
+      <div class="hero__copy">
+        <h1 class="hero__title">
+          {{ heroTitle() }}
+        </h1>
+        <p class="hero__lead">
+          {{ heroLead() }}
+        </p>
+        <ul class="hero__badges">
+          <li>
+            <span class="material-symbols-outlined">verified</span>
+            {{ cms.data('home', 'hero', 'badge_1', 'Собственное производство') }}
+          </li>
+          <li>
+            <span class="material-symbols-outlined">architecture</span>
+            {{ cms.data('home', 'hero', 'badge_2', 'Установка под ключ') }}
+          </li>
+        </ul>
+        <div class="hero__actions">
+          <a [href]="heroButtonUrl()" class="btn btn--accent">{{ heroButtonLabel() }}</a>
+          <a [href]="company.phoneHref" class="btn btn--outline">{{ cms.data('home', 'hero', 'secondary_button', 'Позвонить') }}</a>
+        </div>
+      </div>
+      <div class="hero__scene">
+        <app-monument-scene />
+      </div>
+    </div>
+  </section>
+  }
+
+  @if (cms.enabled('home', 'office')) {
+  <section class="section home-map-section marble-surface" id="map-offices">
+    <header class="page-intro page-intro--section container" appScrollReveal revealVariant="header">
+      <h2 class="page-intro__title">{{ cms.text('home', 'office', 'title', 'Наш офис') }}</h2>
+      <p class="page-intro__lead">
+        {{ cms.text('home', 'office', 'body', 'пос. Родники, ул. Лесная, 70 — приём заказов, консультации и выезд на кладбище.') }}
+        <span class="page-intro__hint page-intro__hint--desktop">{{ cms.data('home', 'office', 'desktop_hint', 'Масштабируйте карту колёсиком мыши.') }}</span>
+        <span class="page-intro__hint page-intro__hint--mobile">{{ cms.data('home', 'office', 'mobile_hint', 'Нажмите «Маршрут», чтобы открыть навигацию.') }}</span>
+      </p>
+    </header>
+
+    <div class="home-map-section__frame" appScrollReveal revealVariant="scale" [revealDelay]="120">
+      <app-region-showcase
+        [locations]="locations()"
+        [selectedId]="selectedRegionCity()"
+        (citySelect)="selectRegionCity($event)"
+      />
+    </div>
+  </section>
+  }
+
+  @if (cms.enabled('home', 'categories')) {
+  <section class="section categories-section granite-surface granite-surface--light" id="categories">
+    <div class="container">
+      <div class="section__header" appScrollReveal revealVariant="header">
+        <h2>{{ cms.text('home', 'categories', 'title', 'Категории памятников') }}</h2>
+      </div>
+      <div class="categories-grid">
+        @for (cat of categories(); track cat.id; let i = $index) {
+          <a [routerLink]="['/catalog']" class="category-card">
+            <div class="category-card__media">
+              <img [src]="cat.image_url" [alt]="cat.title" loading="lazy" />
+              <div class="category-card__scrim" aria-hidden="true"></div>
+            </div>
+            <div class="category-card__body">
+              <h3>{{ cat.title }}</h3>
+              @if (cat.price_from) {
+                <span class="category-card__price">{{ cat.price_from }}</span>
+              }
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+  }
+
+  @if (featuredProducts().length && cms.enabled('home', 'featured')) {
+    <section class="section featured-section">
+      <div class="container">
+        <div class="section__header section__header--row" appScrollReveal revealVariant="header">
+          <div>
+            <h2>{{ cms.text('home', 'featured', 'title', 'Избранные модели') }}</h2>
+          </div>
+          <a [routerLink]="cms.text('home', 'featured', 'button_url', '/catalog')" class="btn btn--ghost">{{ cms.text('home', 'featured', 'button_label', 'Весь каталог') }}</a>
+        </div>
+        <div class="products-grid">
+          @for (p of featuredProducts(); track p.id) {
+            <app-product-card [product]="p" />
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (cms.enabled('home', 'process')) {
+  <section class="section process-section">
+    <div class="container">
+      <div class="section__header" appScrollReveal revealVariant="header">
+        <h2>{{ cms.text('home', 'process', 'title', 'От идеи до установки') }}</h2>
+      </div>
+      <div appScrollReveal revealVariant="soft" [revealDelay]="150">
+        <app-process-timeline [steps]="processSteps" />
+      </div>
+    </div>
+  </section>
+  }
+
+  @if (cms.enabled('home', 'materials')) {
+  <section class="section materials-section granite-surface granite-surface--light">
+    <div class="container">
+      <div class="section__header" appScrollReveal revealVariant="header">
+        <h2>{{ cms.text('home', 'materials', 'title', 'Сравнение камня') }}</h2>
+      </div>
+      <div class="materials-table-wrap" appScrollReveal revealVariant="up" [revealDelay]="120">
+        <table class="materials-table">
+          <thead><tr><th>{{ cms.data('home', 'materials', 'material', 'Материал') }}</th><th>{{ cms.data('home', 'materials', 'origin', 'Происхождение') }}</th><th>{{ cms.data('home', 'materials', 'hardness', 'Твёрдость') }}</th><th>{{ cms.data('home', 'materials', 'frost', 'Морозостойкость') }}</th><th>{{ cms.data('home', 'materials', 'price', 'Цена от') }}</th></tr></thead>
+          <tbody>
+            @for (m of materials; track m.name) {
+              <tr><td><strong>{{ m.name }}</strong></td><td>{{ m.origin }}</td><td>{{ m.hardness }}</td><td>{{ m.frost }}</td><td>{{ m.price }}</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  }
+
+  @if (cms.enabled('home', 'svo')) {
+  <section class="section svo-section">
+    <div class="container">
+      <div class="svo-block" appScrollReveal revealVariant="scale">
+        <div class="svo-block__content">
+          <h2>{{ cms.text('home', 'svo', 'title', 'Памятники участникам СВО') }}</h2>
+          <p>{{ cms.text('home', 'svo', 'body', 'Особые условия для семей защитников Отечества: льготные цены, приоритетное производство, бесплатная консультация и помощь в оформлении документов.') }}</p>
+          <ul>
+            <li><span class="material-symbols-outlined">check_circle</span> {{ cms.data('home', 'svo', 'benefit_1', 'Скидка до 15%') }}</li>
+            <li><span class="material-symbols-outlined">check_circle</span> {{ cms.data('home', 'svo', 'benefit_2', 'Изготовление от 14 дней') }}</li>
+            <li><span class="material-symbols-outlined">check_circle</span> {{ cms.data('home', 'svo', 'benefit_3', 'Рассрочка 0%') }}</li>
+          </ul>
+          <a [href]="cms.text('home', 'svo', 'button_url', '/catalog?type=svo')" class="btn btn--light">{{ cms.text('home', 'svo', 'button_label', 'Смотреть модели СВО') }}</a>
+        </div>
+        <div class="svo-block__visual">
+          <img [src]="cms.text('home', 'svo', 'image_url')" [alt]="cms.data('home', 'svo', 'image_alt', 'Памятники СВО')" />
+        </div>
+      </div>
+    </div>
+  </section>
+  }
+
+  @if (cms.enabled('home', 'reviews')) {
+  <section class="section reviews-section marble-surface" id="reviews">
+    <div class="container">
+      <div class="section__header section__header--row" appScrollReveal revealVariant="header">
+        <div><h2>{{ cms.text('home', 'reviews', 'title', 'Нам доверяют семьи') }}</h2></div>
+        <a [routerLink]="cms.text('home', 'reviews', 'button_url', '/reviews')" class="btn btn--ghost">{{ cms.text('home', 'reviews', 'button_label', 'Отзывы') }}</a>
+      </div>
+      <div class="reviews-grid">
+        @for (r of reviews(); track r.id) {
+          <article class="review-card">
+            @if (r.image_url) {
+              <div class="review-card__media">
+                <img [src]="r.image_url" [alt]="r.author" />
+                @if (r.is_video) { <span class="review-card__play material-symbols-outlined">play_circle</span> }
+              </div>
+            }
+            <div class="review-card__body">
+              <div class="review-card__stars">@for (s of [1,2,3,4,5]; track s) { <span class="material-symbols-outlined">star</span> }</div>
+              <p>{{ r.text }}</p>
+              <cite>{{ r.author }}</cite>
+            </div>
+          </article>
+        }
+      </div>
+    </div>
+  </section>
+  }
+
+  @if (cms.enabled('home', 'portfolio')) {
+  <section class="section portfolio-section" id="portfolio">
+    <div class="container">
+      <div class="section__header section__header--row" appScrollReveal revealVariant="header">
+        <div><h2>{{ cms.text('home', 'portfolio', 'title', 'Реализованные проекты') }}</h2></div>
+        <a [routerLink]="cms.text('home', 'portfolio', 'button_url', '/portfolio')" class="btn btn--ghost">{{ cms.text('home', 'portfolio', 'button_label', 'Смотреть всё портфолио') }}</a>
+      </div>
+      <div class="portfolio-masonry">
+        @for (item of portfolio(); track item.id; let i = $index) {
+          <figure class="portfolio-item" [class.portfolio-item--tall]="i === 1">
+            <img [src]="item.image_url" [alt]="item.title" loading="lazy" />
+            <figcaption>
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.material }} · {{ item.city }}</span>
+            </figcaption>
+          </figure>
+        }
+      </div>
+    </div>
+  </section>
+  }
+
+  <section class="section cta-section granite-surface granite-surface--dark" id="contacts">
+    <div class="container">
+      <div class="cta-block" appScrollReveal revealVariant="scale">
+        <div class="cta-block__text">
+          <h2>{{ cms.text('home', 'consultation', 'title', 'Свяжитесь с нами') }}</h2>
+          <p>{{ cms.text('home', 'consultation', 'body', 'Консультации по телефону и в офисе — без форм на сайте.') }}</p>
+        </div>
+        <div class="cta-contacts">
+          <a class="btn btn--primary" [href]="company.phoneHref">{{ company.phone }}</a>
+          <a class="btn btn--outline" [href]="'mailto:' + company.email">{{ company.email }}</a>
+          <p class="cta-contacts__addr">{{ company.postalAddress }}</p>
+          <p class="cta-contacts__hours">{{ company.workHours }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<app-footer />

@@ -1,0 +1,58 @@
+<div class="trust-booklet" [class.trust-booklet--open]="open()">
+  <div class="trust-booklet__book">
+    <div class="trust-booklet__pages">
+      <div class="trust-booklet__pages-inner">
+        <header class="trust-booklet__spread-head">
+          <h3>Шесть опор качества</h3>
+          <p>То, на что опирается каждый наш проект</p>
+        </header>
+        <div class="trust-booklet__grid">
+          @for (item of items(); track item.title; let i = $index) {
+            <article class="trust-booklet__card" [style.--card-delay]="i * 60 + 'ms'">
+              <span class="trust-booklet__card-num">{{ (i + 1).toString().padStart(2, '0') }}</span>
+              <span class="material-symbols-outlined trust-booklet__card-icon">{{ item.icon }}</span>
+              <h4>{{ item.title }}</h4>
+              <p>{{ item.desc }}</p>
+            </article>
+          }
+        </div>
+        <button type="button" class="trust-booklet__close" (click)="closeBook()">
+          <span class="material-symbols-outlined">menu_book</span>
+          Закрыть буклет
+        </button>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class="trust-booklet__cover"
+      (click)="openBook()"
+      [attr.aria-expanded]="open()"
+      [attr.tabindex]="open() ? -1 : 0"
+    >
+      <span class="trust-booklet__cover-spine" aria-hidden="true"></span>
+      <span class="trust-booklet__cover-face granite-surface granite-surface--warm">
+        <span class="trust-booklet__cover-inner">
+          <span class="trust-booklet__cover-main">
+            <span class="trust-booklet__cover-tag">Почему нам доверяют</span>
+            <span class="trust-booklet__cover-title">Шесть опор<br />качества</span>
+            <span class="trust-booklet__cover-lead">Производство, гарантия и сопровождение — от первой консультации до установки</span>
+            <span class="trust-booklet__cta">
+              <span class="material-symbols-outlined">auto_stories</span>
+              Открыть буклет
+            </span>
+          </span>
+          <span class="trust-booklet__preview" aria-hidden="true">
+            @for (item of items().slice(0, 6); track item.title; let i = $index) {
+              <span class="trust-booklet__preview-item">
+                <span class="trust-booklet__preview-num">{{ i + 1 }}</span>
+                <span class="material-symbols-outlined">{{ item.icon }}</span>
+                <span>{{ item.title }}</span>
+              </span>
+            }
+          </span>
+        </span>
+      </span>
+    </button>
+  </div>
+</div>

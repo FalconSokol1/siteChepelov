@@ -1,0 +1,71 @@
+<app-header />
+<main class="map-page page">
+  <header class="page-intro container">
+    <h1 class="page-intro__title">{{ cms.text('map', 'intro', 'title', 'Наш офис') }}</h1>
+    <p class="page-intro__lead">
+      {{ cms.text('map', 'intro', 'body', 'пос. Родники, ул. Лесная, 70 — приём заказов, консультации и выезд на кладбище.') }}
+      <span class="page-intro__hint page-intro__hint--desktop">{{ cms.data('map', 'intro', 'desktop_hint', 'Масштабируйте карту колёсиком мыши.') }}</span>
+      <span class="page-intro__hint page-intro__hint--mobile">{{ cms.data('map', 'intro', 'mobile_hint', 'Нажмите «Маршрут», чтобы открыть навигацию.') }}</span>
+    </p>
+  </header>
+
+  <section class="map-page__layout">
+    <aside class="map-page__sidebar">
+      <h2>{{ cms.text('map', 'contacts', 'title', 'Контакты офиса') }}</h2>
+      <p>{{ cms.text('map', 'contacts', 'body', 'пос. Родники, ул. Лесная, 70') }}</p>
+      @if (loading()) {
+        <p class="map-page__loading-text">{{ cms.data('map', 'contacts', 'loading', 'Загрузка...') }}</p>
+      } @else {
+        @for (loc of locations(); track loc.id) {
+          <button
+            type="button"
+            class="map-page__city"
+            [class.map-page__city--active]="selectedId() === loc.id"
+            (click)="selectCity(loc)"
+          >
+            <strong>{{ loc.city }}</strong>
+            <span>{{ loc.address }}</span>
+            @if (loc.phone) { <small>{{ loc.phone }}</small> }
+          </button>
+        }
+      }
+
+      @if (activeLocation(); as loc) {
+        <div class="map-page__detail">
+          <p>{{ loc.description }}</p>
+        </div>
+        <div class="map-page__mobile-actions">
+          @if (loc.phone) {
+            <a [href]="phoneHref(loc.phone)" class="map-page__mobile-btn map-page__mobile-btn--call">
+              <span class="material-symbols-outlined" aria-hidden="true">call</span>
+              {{ cms.data('map', 'contacts', 'call', 'Позвонить') }}
+            </a>
+          }
+          <a
+            [href]="mapsRouteUrl(loc)"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="map-page__mobile-btn map-page__mobile-btn--route"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">directions</span>
+            {{ cms.data('map', 'contacts', 'route', 'Маршрут') }}
+          </a>
+        </div>
+      }
+    </aside>
+
+    <div class="map-page__map-wrap">
+      @if (loading()) {
+        <div class="map-page__loading">{{ cms.data('map', 'contacts', 'map_loading', 'Загрузка карты...') }}</div>
+      } @else if (locations().length) {
+        <app-regional-map
+          [locations]="locations()"
+          [selectedId]="selectedId()"
+          [startWithAll]="false"
+          (citySelect)="selectCity($event)"
+        />
+      }
+    </div>
+  </section>
+</main>
+<app-footer />

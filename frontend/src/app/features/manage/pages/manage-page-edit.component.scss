@@ -1,0 +1,165 @@
+@import '../manage-shared';
+
+.form-panel,
+.block {
+  padding: 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.form-panel h2,
+.blocks__head h2 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+
+.blocks__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.blocks__intro {
+  margin: 0.35rem 0 0;
+  color: #646970;
+  font-size: 0.85rem;
+  max-width: 40rem;
+  line-height: 1.4;
+}
+
+.block {
+  &--off {
+    opacity: 0.72;
+  }
+}
+
+.block__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.block__titles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+
+  strong {
+    font-size: 1.05rem;
+    color: #1d2327;
+  }
+}
+
+.block__key {
+  font-size: 0.75rem;
+  color: #646970;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.block__hint {
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.75rem;
+  background: #f0f6fc;
+  border-left: 3px solid #2271b1;
+  color: #1d2327;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.block__tools {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.icon-btn {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #c3c4c7;
+  background: #fff;
+  color: #2271b1;
+  cursor: pointer;
+
+  &:disabled {
+    color: #a7aaad;
+    cursor: default;
+  }
+}
+
+.link-danger {
+  background: none;
+  border: 0;
+  color: #d63638;
+  cursor: pointer;
+  font: inherit;
+}
+
+.extra-fields {
+  border-top: 1px solid #dcdcde;
+  padding-top: 1rem;
+}
+
+.extra-fields__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.extra-fields__hint {
+  margin: 0;
+  color: #646970;
+  font-size: 0.8rem;
+}
+
+.extra-field {
+  display: grid;
+  grid-template-columns: minmax(130px, 0.35fr) 1fr auto;
+  gap: 0.5rem;
+  align-items: start;
+
+  input,
+  textarea {
+    border: 1px solid #8c8f94;
+    padding: 0.5rem 0.6rem;
+    font: inherit;
+    resize: vertical;
+  }
+
+  .link-danger {
+    padding: 0.55rem 0;
+  }
+}
+
+@media (max-width: 680px) {
+  .extra-field {
+    grid-template-columns: 1fr;
+  }
+}
+
+.block-preview {
+  max-width: 320px;
+  max-height: 180px;
+  object-fit: cover;
+  background: #f0f0f1;
+}
+
+.sticky-save {
+  position: sticky;
+  bottom: 1rem;
+  background: rgba(240, 240, 241, 0.92);
+  padding: 0.75rem 0;
+  backdrop-filter: blur(6px);
+}
+
+code {
+  background: #fff;
+  border: 1px solid #dcdcde;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.85em;
+}

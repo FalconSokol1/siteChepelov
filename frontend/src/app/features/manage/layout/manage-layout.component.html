@@ -1,0 +1,31 @@
+<div class="shell">
+  <aside class="shell__sidebar">
+    <a routerLink="/manage" class="shell__brand">
+      <img src="/logo.png" alt="" />
+      <span>КавказКамень</span>
+    </a>
+
+    <nav class="shell__nav">
+      @for (item of nav; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: item.exact }"
+        >
+          <span class="material-symbols-outlined">{{ item.icon }}</span>
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <div class="shell__footer">
+      <div class="shell__user">{{ auth.user()?.username }}</div>
+      <a routerLink="/" target="_blank" rel="noopener">Открыть сайт ↗</a>
+      <button type="button" (click)="logout()">Выйти</button>
+    </div>
+  </aside>
+
+  <main class="shell__main">
+    <router-outlet />
+  </main>
+</div>

@@ -1,0 +1,70 @@
+@import '../manage-shared';
+
+.layout {
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: 960px) {
+    grid-template-columns: 340px 1fr;
+    align-items: start;
+  }
+}
+
+.form-panel {
+  padding: 1.15rem;
+
+  h2 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+  }
+}
+
+.preview {
+  width: 100%;
+  max-height: 170px;
+  object-fit: cover;
+}
+
+.meta {
+  color: #646970;
+  font-size: 0.8rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  display: block;
+  background: #f0f0f1;
+
+  &--empty {
+    display: grid;
+    place-items: center;
+    font-size: 0.7rem;
+    color: #646970;
+    border: 1px dashed #c3c4c7;
+  }
+}
+
+.link,
+.link-danger {
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.link {
+  color: #2271b1;
+  font-weight: 600;
+}
+
+.link-danger {
+  color: #d63638;
+}

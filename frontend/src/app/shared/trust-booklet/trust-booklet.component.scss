@@ -1,0 +1,376 @@
+.trust-booklet {
+  padding: 1rem 0 0.5rem;
+  perspective: 2400px;
+  perspective-origin: 50% 40%;
+
+  &__book {
+    position: relative;
+    transform-style: preserve-3d;
+  }
+
+  // ─── Открытый разворот (под обложкой) ───
+  &__pages {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__pages-inner {
+    position: relative;
+    padding: clamp(1.75rem, 3vw, 2.5rem);
+    background: #fbf8f5;
+    background-image:
+      radial-gradient(circle at 18% 22%, rgba(183, 154, 114, 0.08), transparent 45%),
+      radial-gradient(circle at 82% 78%, rgba(110, 17, 24, 0.05), transparent 42%);
+    border: 1px solid rgba(183, 154, 114, 0.3);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+      0 30px 70px rgba(13, 13, 13, 0.12);
+
+    // корешок слева
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 10px;
+      background: linear-gradient(90deg, rgba(13, 13, 13, 0.12), transparent);
+      pointer-events: none;
+    }
+  }
+
+  &__spread-head {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(13, 13, 13, 0.1);
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 3vw, 2.25rem);
+      margin: 0 0 0.375rem;
+    }
+
+    p {
+      margin: 0;
+      color: var(--color-secondary);
+      font-size: 0.9375rem;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  &__card {
+    position: relative;
+    padding: 1.5rem 1.25rem 1.25rem;
+    min-height: 190px;
+    background: #fff;
+    border: 1px solid rgba(13, 13, 13, 0.08);
+    box-shadow: 0 12px 32px rgba(13, 13, 13, 0.06);
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      border-color 0.3s,
+      box-shadow 0.3s,
+      transform 0.3s;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--color-champagne), rgba(183, 154, 114, 0.2));
+    }
+
+    &:hover {
+      border-color: rgba(183, 154, 114, 0.45);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 44px rgba(13, 13, 13, 0.1);
+    }
+  }
+
+  &__card-num {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1;
+    color: rgba(183, 154, 114, 0.38);
+  }
+
+  &__card-icon {
+    display: block;
+    font-size: 2rem;
+    color: var(--color-champagne);
+    margin-bottom: 0.875rem;
+  }
+
+  &__card h4 {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    margin: 0 0 0.5rem;
+    line-height: 1.25;
+    padding-right: 2rem;
+  }
+
+  &__card p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--color-secondary);
+  }
+
+  &__close {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.75rem auto 0;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid rgba(13, 13, 13, 0.16);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+
+    .material-symbols-outlined {
+      font-size: 1.125rem;
+      color: var(--color-champagne);
+    }
+
+    &:hover {
+      border-color: var(--color-champagne);
+      color: var(--color-bordeaux);
+    }
+  }
+
+  // ─── Обложка книги (поверх разворота) ───
+  &__cover {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    color: #fff;
+    transform-origin: left center;
+    transform: rotateY(0deg);
+    transition: transform 1.05s cubic-bezier(0.65, 0, 0.35, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+    box-shadow:
+      0 22px 50px rgba(13, 13, 13, 0.3),
+      6px 0 22px rgba(0, 0, 0, 0.18);
+
+    &:hover {
+      .trust-booklet__cta {
+        background: #fff;
+        color: var(--color-primary);
+      }
+    }
+  }
+
+  &__cover-spine {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 16px;
+    z-index: 2;
+    background: linear-gradient(180deg, #c9ad82 0%, #7a6348 48%, #c9ad82 100%);
+    box-shadow: inset -3px 0 10px rgba(0, 0, 0, 0.4);
+  }
+
+  &__cover-face {
+    display: block;
+    height: 100%;
+    border: 1px solid rgba(183, 154, 114, 0.4);
+    overflow: hidden;
+  }
+
+  &__cover-inner {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 2rem;
+    height: 100%;
+    padding: clamp(2rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem) clamp(2rem, 4vw, 3rem) calc(clamp(2rem, 4vw, 3rem) + 16px);
+    background:
+      radial-gradient(circle at 85% 18%, rgba(183, 154, 114, 0.18), transparent 44%),
+      radial-gradient(circle at 8% 92%, rgba(110, 17, 24, 0.16), transparent 42%);
+  }
+
+  &__cover-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__cover-tag {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-champagne);
+  }
+
+  &__cover-title {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.2vw, 3rem);
+    line-height: 1.08;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  &__cover-lead {
+    display: block;
+    max-width: 420px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    background: var(--color-champagne);
+    transition: background 0.25s, color 0.25s;
+
+    .material-symbols-outlined {
+      font-size: 1.125rem;
+    }
+  }
+
+  &__preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+    align-content: center;
+  }
+
+  &__preview-item {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.875rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(183, 154, 114, 0.2);
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.85);
+
+    .material-symbols-outlined {
+      font-size: 1.125rem;
+      color: var(--color-champagne);
+    }
+  }
+
+  &__preview-num {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    color: rgba(183, 154, 114, 0.6);
+  }
+
+  // ─── Открытое состояние ───
+  &--open {
+    .trust-booklet__cover {
+      transform: rotateY(-162deg);
+      pointer-events: none;
+      box-shadow: -12px 0 36px rgba(0, 0, 0, 0.28);
+    }
+
+    .trust-booklet__card {
+      opacity: 1;
+      transform: translateY(0);
+      transition:
+        opacity 0.5s ease calc(0.55s + var(--card-delay, 0ms)),
+        transform 0.55s var(--ease-luxury) calc(0.55s + var(--card-delay, 0ms)),
+        border-color 0.3s,
+        box-shadow 0.3s;
+    }
+  }
+}
+
+@media (max-width: 960px) {
+  .trust-booklet__cover-inner {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    align-content: center;
+  }
+
+  .trust-booklet__preview {
+    display: none;
+  }
+
+  .trust-booklet__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .trust-booklet {
+    perspective: 1500px;
+  }
+
+  .trust-booklet__cover-inner {
+    padding: 1.5rem 1.25rem 1.5rem calc(1.25rem + 16px);
+  }
+
+  .trust-booklet__cover-title {
+    font-size: 1.75rem;
+  }
+
+  .trust-booklet__cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .trust-booklet__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trust-booklet--open .trust-booklet__cover {
+    transform: rotateY(-155deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-booklet__cover {
+    transition: opacity 0.3s ease;
+  }
+
+  .trust-booklet--open .trust-booklet__cover {
+    opacity: 0;
+    transform: none;
+  }
+
+  .trust-booklet__card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

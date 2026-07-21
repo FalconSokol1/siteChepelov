@@ -1,0 +1,83 @@
+<app-header />
+<main class="product-detail page">
+  @if (loading()) {
+    <div class="product-detail__loading container">{{ cms.data('product', 'interface', 'loading', 'Загрузка...') }}</div>
+  } @else if (notFound() || !product()) {
+    <div class="product-detail__missing container">
+      <h1>{{ cms.data('product', 'interface', 'not_found', 'Товар не найден') }}</h1>
+      <a routerLink="/catalog" class="btn btn--primary">{{ cms.data('product', 'interface', 'to_catalog', 'В каталог') }}</a>
+    </div>
+  } @else {
+  @if (product(); as p) {
+    <div class="product-detail__layout container">
+      <div class="product-detail__gallery">
+        <img [src]="selectedImage() || p.image_url" [alt]="p.name" />
+        @if (p.featured) { <span class="product-detail__badge">{{ cms.data('product', 'interface', 'featured', 'Хит продаж') }}</span> }
+        @if (galleryImages(p).length > 1) {
+          <div class="product-detail__thumbs" aria-label="Изображения товара">
+            @for (image of galleryImages(p); track image) {
+              <button
+                type="button"
+                [class.product-detail__thumb--active]="selectedImage() === image"
+                (click)="selectImage(image)"
+                [attr.aria-label]="'Показать изображение ' + ($index + 1)"
+              >
+                <img [src]="image" [alt]="p.name + ', изображение ' + ($index + 1)" />
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="product-detail__info">
+        <span class="eyebrow">{{ p.sku }}</span>
+        <h1 class="product-detail__title">{{ p.name }}</h1>
+        <p class="product-detail__placeholder">{{ cms.data('product', 'interface', 'no_data', 'Данные пока что не указаны') }}</p>
+
+        <div class="product-detail__actions">
+          <a [href]="cms.data('global', 'company', 'phone_href', company.phoneHref)" class="btn btn--primary product-detail__call">
+            <span class="material-symbols-outlined" aria-hidden="true">call</span>
+            {{ cms.data('product', 'interface', 'call', 'Позвонить') }} {{ cms.data('global', 'company', 'phone', company.phone) }}
+          </a>
+
+          <div class="product-detail__extras">
+            <button
+              type="button"
+              class="product-detail__extras-toggle"
+              (click)="toggleExtras()"
+              [attr.aria-expanded]="extrasOpen()"
+            >
+              <span>{{ cms.data('product', 'interface', 'extras', 'С памятником заказывают…') }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">
+                {{ extrasOpen() ? 'expand_less' : 'expand_more' }}
+              </span>
+            </button>
+
+            @if (extrasOpen()) {
+              <div class="product-detail__extras-panel" role="region" [attr.aria-label]="cms.data('product', 'interface', 'extras_aria', 'Дополнительные услуги')">
+                <ul class="product-detail__extras-list">
+                  @for (service of extras(); track service.id) {
+                    <li>
+                      <strong>{{ service.title }}</strong>
+                      <span>{{ service.description }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        </div>
+
+        <section class="product-detail__about">
+          <h2>{{ cms.data('product', 'interface', 'description', 'Описание') }}</h2>
+          <p>{{ p.description || cms.data('product', 'interface', 'no_data', 'Данные пока что не указаны') }}</p>
+
+          <h2>{{ cms.data('product', 'interface', 'conditions', 'Условия изготовления и доставки') }}</h2>
+          <p>{{ cms.data('product', 'interface', 'no_data', 'Данные пока что не указаны') }}</p>
+        </section>
+      </div>
+    </div>
+  }
+  }
+</main>
+<app-footer />

@@ -1,0 +1,174 @@
+<div class="page">
+  <header class="page__head">
+    <h1>{{ isNew() ? 'Новый товар' : 'Редактирование товара' }}</h1>
+    <p>
+      <a routerLink="/manage/products">← Все товары</a>
+      @if (!isNew() && form.slug) {
+        ·
+        <a [routerLink]="['/catalog', form.slug]" target="_blank">Смотреть на сайте ↗</a>
+      }
+    </p>
+  </header>
+
+  @if (message()) {
+    <div class="notice notice--ok">{{ message() }}</div>
+  }
+  @if (error()) {
+    <div class="notice notice--error">{{ error() }}</div>
+  }
+
+  @if (loading()) {
+    <p>Загрузка…</p>
+  } @else {
+    <div class="editor">
+      <form class="editor__main panel" (ngSubmit)="save()">
+        <div class="form-grid" style="padding: 1.25rem">
+          <label class="field field--full">
+            <span>Название</span>
+            <input [(ngModel)]="form.name" name="name" required (blur)="onNameBlur()" />
+          </label>
+
+          <div class="form-row">
+            <label class="field">
+              <span>Артикул</span>
+              <input [(ngModel)]="form.sku" name="sku" required />
+            </label>
+            <label class="field">
+              <span>URL (slug)</span>
+              <input [(ngModel)]="form.slug" name="slug" required />
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label class="field">
+              <span>Материал</span>
+              <select [(ngModel)]="form.material" name="material">
+                @for (m of materials; track m.value) {
+                  <option [value]="m.value">{{ m.label }}</option>
+                }
+              </select>
+            </label>
+            <label class="field">
+              <span>Подпись материала</span>
+              <input [(ngModel)]="form.material_label" name="material_label" />
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label class="field">
+              <span>Стиль</span>
+              <select [(ngModel)]="form.style" name="style">
+                @for (s of styles; track s.value) {
+                  <option [value]="s.value">{{ s.label }}</option>
+                }
+              </select>
+            </label>
+            <label class="field">
+              <span>Тип</span>
+              <select [(ngModel)]="form.product_type" name="product_type">
+                @for (t of types; track t.value) {
+                  <option [value]="t.value">{{ t.label }}</option>
+                }
+              </select>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label class="field">
+              <span>Цена, ₽</span>
+              <input type="number" [(ngModel)]="form.price" name="price" min="0" />
+            </label>
+            <label class="field">
+              <span>Категория</span>
+              <select [(ngModel)]="form.category" name="category">
+                <option [ngValue]="null">— без категории —</option>
+                @for (c of categories(); track c.id) {
+                  <option [ngValue]="c.id">{{ c.title }}</option>
+                }
+              </select>
+            </label>
+          </div>
+
+          <div class="field field--full media-block">
+            <app-manage-media-field
+              label="Главное фото карточки"
+              hint="Это фото в каталоге и на карточке товара. Лучше вертикальный кадр памятника на светлом фоне."
+              placeholder="Загрузите фото памятника целиком — как на витрине"
+              ratio="tall"
+              [(value)]="form.image_url"
+            />
+          </div>
+
+          <div class="field field--full media-block">
+            <app-manage-gallery-field
+              label="Галерея на странице товара"
+              hint="Дополнительные ракурсы. Можно загрузить сразу несколько файлов. Порядок можно менять стрелками."
+              [(urls)]="form.gallery"
+            />
+          </div>
+
+          <div class="form-row">
+            <label class="field">
+              <span>Размеры</span>
+              <input [(ngModel)]="form.dimensions" name="dimensions" />
+            </label>
+            <label class="field">
+              <span>Обработка</span>
+              <input [(ngModel)]="form.finish" name="finish" />
+            </label>
+          </div>
+
+          <label class="field field--full">
+            <span>Описание</span>
+            <textarea [(ngModel)]="form.description" name="description" rows="6"></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" [disabled]="saving()">
+              {{ saving() ? 'Сохранение…' : 'Обновить' }}
+            </button>
+            <a routerLink="/manage/products" class="btn">Отмена</a>
+          </div>
+        </div>
+      </form>
+
+      <aside class="editor__side">
+        <div class="panel side-box">
+          <h3>Публикация</h3>
+          <label class="check">
+            <input type="checkbox" [(ngModel)]="form.featured" name="featured" />
+            Показывать на главной
+          </label>
+          <button type="button" class="btn btn--primary" style="width: 100%; margin-top: 1rem" (click)="save()" [disabled]="saving()">
+            {{ saving() ? '…' : 'Сохранить' }}
+          </button>
+        </div>
+
+        <div class="panel side-box">
+          <h3>Как будет выглядеть</h3>
+          @if (form.image_url) {
+            <img [src]="form.image_url" [alt]="form.name" class="preview" />
+          } @else {
+            <div class="preview preview--empty">Нет главного фото</div>
+          }
+          <p class="preview-name">{{ form.name || 'Название товара' }}</p>
+          <p class="preview-price">{{ form.price | number }} ₽</p>
+        </div>
+
+        <div class="panel side-box">
+          <h3>Доп. услуги</h3>
+          @for (s of services(); track s.id) {
+            <label class="check">
+              <input
+                type="checkbox"
+                [checked]="form.extra_service_ids.includes(s.id)"
+                (change)="toggleService(s.id, $any($event.target).checked)"
+              />
+              {{ s.title }}
+            </label>
+          }
+        </div>
+      </aside>
+    </div>
+  }
+</div>

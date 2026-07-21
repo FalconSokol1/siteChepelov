@@ -1,0 +1,53 @@
+<div class="media" [class.media--tall]="ratio === 'tall'" [class.media--square]="ratio === 'square'">
+  <div class="media__label-row">
+    <span class="media__label">{{ label }}</span>
+    @if (value) {
+      <button type="button" class="media__clear" (click)="clear()">Убрать</button>
+    }
+  </div>
+
+  @if (hint) {
+    <p class="media__hint">{{ hint }}</p>
+  }
+
+  <div class="media__frame" [class.media__frame--empty]="!value || broken()">
+    @if (value && !broken()) {
+      <img [src]="value" [alt]="label" (error)="onImgError()" (load)="onImgLoad()" />
+    } @else {
+      <div class="media__empty">
+        <span class="media__empty-icon" aria-hidden="true">📷</span>
+        <strong>{{ broken() ? 'Ссылка не открывается' : 'Фото ещё нет' }}</strong>
+        <span>{{ placeholder }}</span>
+      </div>
+    }
+    @if (uploading()) {
+      <div class="media__overlay">Загрузка…</div>
+    }
+  </div>
+
+  <div class="media__actions">
+    <label class="media__upload btn btn--primary">
+      {{ value ? 'Заменить фото' : 'Загрузить фото' }}
+      <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" (change)="onFile($event)" hidden />
+    </label>
+    <button type="button" class="btn" (click)="showUrl = !showUrl">
+      {{ showUrl ? 'Скрыть ссылку' : 'Вставить ссылку' }}
+    </button>
+  </div>
+
+  @if (showUrl) {
+    <label class="media__url">
+      <span>URL картинки</span>
+      <input
+        type="url"
+        [ngModel]="value"
+        (ngModelChange)="onUrl($event)"
+        placeholder="https://… или /media/…"
+      />
+    </label>
+  }
+
+  @if (error()) {
+    <p class="media__error">{{ error() }}</p>
+  }
+</div>

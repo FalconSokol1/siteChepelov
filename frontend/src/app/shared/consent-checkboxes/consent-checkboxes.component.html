@@ -1,0 +1,22 @@
+<div class="consent" [class.consent--compact]="compact()">
+  <label class="consent__item">
+    <input type="checkbox" [ngModel]="pdConsent()" (ngModelChange)="pdConsent.set($event)" name="pdConsent" required />
+    <span>
+      {{ cms.data('global', 'consent', 'prefix', 'Я даю') }}
+      <a routerLink="/legal/personal-data-consent" target="_blank" rel="noopener">{{ cms.data('global', 'consent', 'personal_data', 'согласие на обработку персональных данных') }}</a>
+      {{ cms.data('global', 'consent', 'policy_prefix', 'и ознакомлен(а) с') }}
+      <a routerLink="/legal/privacy" target="_blank" rel="noopener">{{ cms.data('global', 'consent', 'policy', 'Политикой обработки ПДн') }}</a>.
+    </span>
+  </label>
+
+  @if (showMarketing()) {
+    <label class="consent__item consent__item--optional">
+      <input type="checkbox" [ngModel]="marketingConsent()" (ngModelChange)="marketingConsent.set($event)" name="marketingConsent" />
+      <span>
+        {{ cms.data('global', 'consent', 'marketing_prefix', 'Я согласен(на) на получение') }}
+        <a routerLink="/legal/marketing" target="_blank" rel="noopener">{{ cms.data('global', 'consent', 'marketing', 'рекламной информации') }}</a>
+        {{ cms.data('global', 'consent', 'optional', '(необязательно).') }}
+      </span>
+    </label>
+  }
+</div>

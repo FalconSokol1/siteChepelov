@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Корзина | KavkazKamen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&amp;family=Inter:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#ddd9d8",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed": "#410006",
+                    "on-error": "#ffffff",
+                    "surface-container": "#f1edec",
+                    "primary": "#0d0d0d",
+                    "on-primary-fixed": "#1b1c1c",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-primary": "#c8c6c5",
+                    "surface-variant": "#e5e2e1",
+                    "on-primary-fixed-variant": "#474746",
+                    "surface": "#fdf8f8",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#313030",
+                    "surface-tint": "#5f5e5e",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#dd6463",
+                    "error-container": "#ffdad6",
+                    "on-surface-variant": "#444748",
+                    "on-tertiary-fixed-variant": "#842226",
+                    "surface-container-low": "#f7f3f2",
+                    "inverse-on-surface": "#f4f0ef",
+                    "primary-container": "#232323",
+                    "on-background": "#1c1b1b",
+                    "secondary-fixed-dim": "#cbc6bf",
+                    "outline-variant": "#c4c7c7",
+                    "tertiary-fixed-dim": "#ffb3b0",
+                    "on-secondary-fixed-variant": "#494641",
+                    "surface-bright": "#fdf8f8",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "tertiary": "#260002",
+                    "outline": "#747878",
+                    "secondary-container": "#e8e2db",
+                    "on-secondary-fixed": "#1d1b17",
+                    "tertiary-container": "#4f0009",
+                    "surface-container-high": "#ebe7e7",
+                    "secondary-fixed": "#e8e2db",
+                    "on-primary-container": "#8b8a8a",
+                    "on-surface": "#1c1b1b",
+                    "surface-container-highest": "#e5e2e1",
+                    "on-secondary-container": "#67645e",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#e5e2e1",
+                    "background": "#fdf8f8",
+                    "secondary": "#615e59",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffdad8",
+                    "champagne": "#B79A72",
+                    "graphite": "#232323",
+                    "deep-bordeaux": "#6E1118"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0rem",
+                    "lg": "0rem",
+                    "xl": "0rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "grid-column-count": "12",
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "section-padding": "120px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter", "sans-serif"],
+                    "headline-lg": ["EB Garamond", "serif"],
+                    "body-lg": ["Inter", "sans-serif"],
+                    "headline-md": ["EB Garamond", "serif"],
+                    "label-caps": ["Inter", "sans-serif"],
+                    "display-xl": ["EB Garamond", "serif"],
+                    "headline-lg-mobile": ["EB Garamond", "serif"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0", "fontWeight": "400"}],
+                    "headline-lg": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "0", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "display-xl": ["84px", {"lineHeight": "92px", "letterSpacing": "-0.03em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["40px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .cart-item-hover:hover .remove-btn {
+            opacity: 1;
+        }
+        .shimmer-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .shimmer-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(183, 154, 114, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+        .shimmer-btn:hover::after {
+            opacity: 1;
+            left: 100%;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant h-20 transition-all duration-300">
+<div class="flex justify-between items-center h-full px-margin-mobile md:px-margin-desktop max-w-full mx-auto">
+<div class="flex items-center gap-12">
+<a class="font-headline-md text-headline-md font-medium tracking-tighter text-primary" href="#">KavkazKamen</a>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-body-md text-body-md tracking-wide text-secondary hover:text-primary transition-colors duration-400" href="#">Catalog</a>
+<a class="font-body-md text-body-md tracking-wide text-secondary hover:text-primary transition-colors duration-400" href="#">Portfolio</a>
+<a class="font-body-md text-body-md tracking-wide text-secondary hover:text-primary transition-colors duration-400" href="#">Heritage</a>
+<a class="font-body-md text-body-md tracking-wide text-secondary hover:text-primary transition-colors duration-400" href="#">Workshop</a>
+<a class="font-body-md text-body-md tracking-wide text-secondary hover:text-primary transition-colors duration-400" href="#">Consultation</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="relative text-primary border-b border-primary pb-1">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="absolute -top-2 -right-2 bg-champagne text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-section-padding min-h-screen">
+<div class="max-w-full mx-auto px-margin-mobile md:px-margin-desktop">
+<header class="mb-16">
+<h1 class="font-headline-lg text-headline-lg mb-4">Ваш выбор</h1>
+<p class="font-body-lg text-body-lg text-secondary max-w-2xl">Выбранные изделия из натурального камня, подготовленные для финального расчета и реализации вашего проекта.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Cart Items List -->
+<div class="lg:col-span-8 space-y-12">
+<!-- Item 1 -->
+<div class="cart-item-hover group flex flex-col md:flex-row gap-8 pb-12 border-b border-outline-variant">
+<div class="w-full md:w-64 h-80 overflow-hidden bg-surface-container relative">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A professional studio photograph of a monolithic dark granite memorial monument. The stone has a polished finish that reflects subtle museum lighting. The background is a clean, minimalist architectural space with soft shadows, emphasizing the weight and permanence of the high-end craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeg-IQ4bgPURCcqZ_2FnT1ncAwQJxtTmDYa4USIS2BuP8aScpFf6ItQrLFgCx4Hfc7Rnwpv87J5Xwx-lxNjFivPyj72og2KDeezlo_QNyKM6oKznNlE_erPDNLPBeg-f6CJ6lT5sS-FDcpA-P_cICzM7sV9XS0ZTz5R8LhCrhOrV5gppewd2gphwAO2foxmmikRCtLcrncKvS6Ofp5mJRQGy53QBRYdejHAUqXqmb7v0KyUQ1FVAj59pekiiU_EWBfgQ5TKby4cqk"/>
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="flex-1 flex flex-col justify-between py-2">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md mb-2">Мемориал «Архыз»</h3>
+<button class="remove-btn opacity-0 transition-opacity duration-300 text-secondary hover:text-error">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<p class="font-label-caps text-label-caps text-champagne mb-6">АРТИКУЛ: KK-9042</p>
+<div class="grid grid-cols-2 gap-y-4 max-w-sm">
+<div>
+<p class="font-label-caps text-[10px] text-on-secondary-container uppercase mb-1">Материал</p>
+<p class="font-body-md text-body-md">Габбро-диабаз</p>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-on-secondary-container uppercase mb-1">Обработка</p>
+<p class="font-body-md text-body-md">Зеркальный глянец</p>
+</div>
+<div class="col-span-2">
+<p class="font-label-caps text-[10px] text-on-secondary-container uppercase mb-1">Размеры (см)</p>
+<p class="font-body-md text-body-md">120 × 60 × 10</p>
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<div class="flex items-center border border-outline-variant px-4 py-2 gap-6">
+<button class="text-secondary hover:text-primary transition-colors">−</button>
+<span class="font-body-md w-4 text-center">1</span>
+<button class="text-secondary hover:text-primary transition-colors">+</button>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-[10px] text-on-secondary-container uppercase mb-1">Оценка стоимости</p>
+<p class="font-headline-md text-headline-md">185 000 ₽</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="cart-item-hover group flex flex-col md:flex-row gap-8 pb-12 border-b border-outline-variant">
+<div class="w-full md:w-64 h-80 overflow-hidden bg-surface-container relative">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Detailed macro shot of a hand-carved marble texture featuring fine, classical architectural motifs. The stone is a warm white with subtle grey veining, illuminated by side lighting that brings out the tactile depth of the carving. The style is museum-quality craftsmanship, conveying a sense of heritage and luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMPgn25uOwyFEVF3-s06caXyNtZutsQRQGXnxtPW5ZvW-Q7MmLlCnHLSuVKd0W8i1Yyq5u--hAOKjpkKSxQje0wHmklvgzeUu3p45bOKHbCnzTJrprnB8lkaJ6mShR6AaAPL0GHcp0c9LLK93Yoj3e66DI8wConXjcOr6heKO4MDtFBJCarxp3l_UmfYzuhMkksXMYtL1I30LBwm8DEU0yw3jjlRetBQ9jxevWmLKw7OezNv6ocQT_RrRn-ejVU1FPBZgoDP1H9Sc"/>
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="flex-1 flex flex-col justify-between py-2">
+<div>
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md mb-2">Портик «Эльбрус»</h3>
+<button class="remove-btn opacity-0 transition-opacity duration-300 text-secondary hover:text-error">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<p class="font-label-caps text-label-caps text-champagne mb-6">АРТИКУЛ: KK-1128</p>
+<div class="grid grid-cols-2 gap-y-4 max-w-sm">
+<div>
+<p class="font-label-caps text-[10px] text-on-secondary-container uppercase mb-1">Материал</p>
+<p class="font-body-md text-body-md">Белый Мрамор</p>
+</div>
+<div>
+<p class="font-label-caps text-[10px] text-on-secondary-container uppercase mb-1">Обработка</p>
+<p class="font-body-md text-body-md">Антик / Матовая</p>
+</div>
+<div class="col-span-2">
+<p class="font-label-caps text-[10px] text-on-secondary-container uppercase mb-1">Тип резьбы</p>
+<p class="font-body-md text-body-md">Авторская ручная работа</p>
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<div class="flex items-center border border-outline-variant px-4 py-2 gap-6">
+<button class="text-secondary hover:text-primary transition-colors">−</button>
+<span class="font-body-md w-4 text-center">1</span>
+<button class="text-secondary hover:text-primary transition-colors">+</button>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-[10px] text-on-secondary-container uppercase mb-1">Оценка стоимости</p>
+<p class="font-headline-md text-headline-md">420 000 ₽</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Sidebar -->
+<aside class="lg:col-span-4 sticky top-32">
+<div class="bg-surface-container p-8 border border-outline-variant">
+<h2 class="font-headline-md text-headline-md mb-8 border-b border-outline-variant pb-4">Резюме заказа</h2>
+<div class="space-y-4 mb-10">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-secondary">Изделия (2 шт.)</span>
+<span class="font-body-md">605 000 ₽</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-secondary">Материал и обработка</span>
+<span class="font-body-md text-champagne">Включено</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-secondary">Проектирование 3D</span>
+<span class="font-body-md text-champagne">В подарок</span>
+</div>
+<div class="pt-6 border-t border-outline-variant mt-6">
+<div class="flex justify-between items-baseline">
+<span class="font-headline-md text-[20px]">Предварительный итог</span>
+<span class="font-display-xl text-[48px] tracking-tight">605 000 ₽</span>
+</div>
+<p class="font-label-caps text-[10px] text-on-secondary-container text-right mt-2">* Конечная стоимость зависит от сложности установки и доставки.</p>
+</div>
+</div>
+<div class="space-y-4">
+<button class="shimmer-btn w-full bg-graphite text-white py-6 px-8 font-label-caps uppercase tracking-widest text-center hover:bg-deep-bordeaux transition-colors duration-400">
+                                Перейти к оформлению
+                            </button>
+<button class="w-full border border-champagne text-primary py-6 px-8 font-label-caps uppercase tracking-widest text-center hover:bg-champagne hover:text-white transition-all duration-400">
+                                Заказать консультацию
+                            </button>
+</div>
+<div class="mt-8 flex items-start gap-4">
+<span class="material-symbols-outlined text-champagne">verified_user</span>
+<p class="font-label-caps text-[11px] text-secondary leading-relaxed">Безопасная сделка. Юридическая гарантия качества камня и сроков исполнения 50 лет.</p>
+</div>
+</div>
+<!-- Helpful Links -->
+<div class="mt-6 p-8 bg-surface-container-low border border-outline-variant">
+<h4 class="font-label-caps text-label-caps mb-4">Нужна помощь?</h4>
+<ul class="space-y-3 font-body-md text-body-md text-secondary">
+<li><a class="hover:text-champagne transition-colors flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[18px]">call</span> +7 (900) 000-00-00</a></li>
+<li><a class="hover:text-champagne transition-colors flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[18px]">history_edu</span> Условия доставки</a></li>
+<li><a class="hover:text-champagne transition-colors flex items-center gap-2" href="#"><span class="material-symbols-outlined text-[18px]">architecture</span> Заказать замер</a></li>
+</ul>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container border-t border-outline-variant py-section-padding w-full">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-mobile md:px-margin-desktop max-w-full mx-auto">
+<div class="md:col-span-4">
+<h2 class="font-headline-md text-headline-md text-primary mb-8">KavkazKamen</h2>
+<p class="font-body-md text-secondary max-w-xs mb-8">Мастерская камня, объединяющая вековые традиции Кавказа и современные архитектурные решения.</p>
+</div>
+<div class="md:col-span-2">
+<h4 class="font-label-caps text-label-caps text-primary mb-6">Навигация</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-secondary hover:text-primary transition-all" href="#">Каталог камня</a></li>
+<li><a class="font-body-md text-secondary hover:text-primary transition-all" href="#">Наши работы</a></li>
+<li><a class="font-body-md text-secondary hover:text-primary transition-all" href="#">О производстве</a></li>
+</ul>
+</div>
+<div class="md:col-span-2">
+<h4 class="font-label-caps text-label-caps text-primary mb-6">Клиентам</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-secondary hover:text-primary transition-all" href="#">Доставка и монтаж</a></li>
+<li><a class="font-body-md text-secondary hover:text-primary transition-all" href="#">Рассрочка</a></li>
+<li><a class="font-body-md text-secondary hover:text-primary transition-all" href="#">FAQ</a></li>
+</ul>
+</div>
+<div class="md:col-span-4 flex flex-col justify-between items-start md:items-end">
+<div class="flex gap-6 mb-8">
+<a class="text-secondary hover:text-champagne transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-secondary hover:text-champagne transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+</div>
+<p class="font-label-caps text-label-caps text-secondary text-right">© 2024 KavkazKamen. Architectural Stone Excellence.</p>
+</div>
+</div>
+</footer>
+<!-- Micro-interaction script -->
+<script>
+        // Subtle scroll behavior for the navbar
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('h-16', 'bg-surface-bright');
+                nav.classList.remove('h-20', 'bg-surface/80');
+            } else {
+                nav.classList.remove('h-16', 'bg-surface-bright');
+                nav.classList.add('h-20', 'bg-surface/80');
+            }
+        });
+
+        // Simple cart removal logic for visual feedback
+        document.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const item = this.closest('.cart-item-hover');
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(10px)';
+                item.style.transition = 'all 0.4s ease';
+                setTimeout(() => {
+                    item.remove();
+                    checkEmptyState();
+                }, 400);
+            });
+        });
+
+        function checkEmptyState() {
+            const container = document.querySelector('.lg\\:col-span-8');
+            if (container.children.length === 0) {
+                container.innerHTML = `
+                    <div class="py-20 text-center flex flex-col items-center">
+                        <span class="material-symbols-outlined text-[80px] text-surface-dim mb-8">shopping_basket</span>
+                        <h2 class="font-headline-lg text-[40px] mb-4">Ваша корзина пока пуста</h2>
+                        <p class="font-body-lg text-secondary mb-12 max-w-md">Выберите памятник или архитектурный элемент в нашем каталоге, чтобы начать расчет.</p>
+                        <a href="#" class="border-b border-primary pb-2 font-label-caps tracking-widest hover:text-champagne hover:border-champagne transition-all">Перейти в каталог</a>
+                    </div>
+                `;
+                // Hide sidebar summary in empty state
+                document.querySelector('aside').style.opacity = '0.3';
+                document.querySelector('aside').style.pointerEvents = 'none';
+            }
+        }
+    </script>
+</body></html>
