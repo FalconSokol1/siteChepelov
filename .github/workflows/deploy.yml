@@ -1,0 +1,125 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    # Skip if secrets are not configured yet
+    if: ${{ secrets.DEPLOY_HOST != '' && secrets.DEPLOY_SSH_KEY != '' }}
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build frontend
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build -- --configuration=production
+
+      - name: Setup SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          PORT="${DEPLOY_PORT:-22}"
+          USER_NAME="${DEPLOY_USER:-root}"
+          ssh-keyscan -p "$PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+          cat >> ~/.ssh/config <<EOF
+          Host deploy
+            HostName ${DEPLOY_HOST}
+            User ${USER_NAME}
+            Port ${PORT}
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking accept-new
+          EOF
+
+      - name: Sync code to server
+        run: |
+          APP_DIR="/var/www/kavkazkamen"
+          ssh deploy "mkdir -p ${APP_DIR}"
+          rsync -az --delete \
+            -e "ssh" \
+            --exclude '.git' \
+            --exclude 'node_modules' \
+            --exclude 'frontend/node_modules' \
+            --exclude 'backend/.venv' \
+            --exclude 'backend/db.sqlite3' \
+            --exclude 'backend/media' \
+            --exclude 'backend/staticfiles' \
+            --exclude 'backend/.env' \
+            --exclude '__pycache__' \
+            --exclude '.github' \
+            ./ deploy:${APP_DIR}/
+
+          # Upload prebuilt frontend
+          rsync -az --delete \
+            -e "ssh" \
+            frontend/dist/frontend/browser/ \
+            deploy:${APP_DIR}/frontend/dist/frontend/browser/
+
+      - name: Remote migrate and restart
+        run: |
+          ssh deploy bash -s <<'EOF'
+          set -euo pipefail
+          APP_DIR=/var/www/kavkazkamen
+          cd "${APP_DIR}/backend"
+
+          if [ ! -d .venv ]; then
+            python3 -m venv .venv
+          fi
+          source .venv/bin/activate
+          pip install -q --upgrade pip
+          pip install -q -r requirements.txt
+
+          if [ ! -f .env ]; then
+            echo "ERROR: ${APP_DIR}/backend/.env missing on server. Create it once manually." >&2
+            exit 1
+          fi
+
+          python manage.py migrate --noinput
+          python manage.py collectstatic --noinput
+          mkdir -p media
+          chown -R www-data:www-data media staticfiles 2>/dev/null || true
+
+          # Ensure systemd unit is installed
+          if [ -f "${APP_DIR}/deploy/kavkazkamen.service" ]; then
+            cp "${APP_DIR}/deploy/kavkazkamen.service" /etc/systemd/system/kavkazkamen.service
+            systemctl daemon-reload
+            systemctl enable kavkazkamen
+          fi
+          systemctl restart kavkazkamen
+
+          # Nginx configs (do not overwrite TLS setup blindly if live certs exist)
+          if [ -f /etc/letsencrypt/live/kavkazkamen.ru/fullchain.pem ]; then
+            cp "${APP_DIR}/deploy/nginx-kavkazkamen.conf" /etc/nginx/sites-available/kavkazkamen
+          else
+            cp "${APP_DIR}/deploy/nginx-kavkazkamen.http.conf" /etc/nginx/sites-available/kavkazkamen
+          fi
+          ln -sfn /etc/nginx/sites-available/kavkazkamen /etc/nginx/sites-enabled/kavkazkamen
+          nginx -t
+          systemctl reload nginx
+
+          curl -fsS http://127.0.0.1:8000/api/health/ || true
+          echo "Deploy OK"
+          EOF

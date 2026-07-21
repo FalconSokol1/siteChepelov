@@ -22,6 +22,14 @@
 
 Требования: DNS A-записи `kavkazkamen.ru`, `www`, `admin` → IP сервера.
 
+### CI/CD (рекомендуется)
+
+Автосборка и выкладка через GitHub Actions — см. [`deploy/GITHUB_ACTIONS.md`](deploy/GITHUB_ACTIONS.md).
+
+Нужны секреты репозитория: `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`.
+
+### Вручную
+
 ```bash
 # с машины разработчика (нужен SSH и rsync)
 bash deploy/deploy.sh root@201.51.12.106
