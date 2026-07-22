@@ -13,7 +13,7 @@ export const COMPANY = {
   postalAddress: '352601, Краснодарский край, Белореченский р-н, пос. Родники, ул. Лесная, 70',
   phone: '+7 (918) 240-57-87',
   phoneHref: 'tel:+79182405787',
-  email: 'info@chepelov.ru',
+  email: 'kavkazkamen_official@mail.ru',
   director: 'Чепелов Даниил Васильевич',
   bank: 'ПАО «Сбербанк»',
   bik: '040349602',

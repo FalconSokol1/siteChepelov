@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { catchError, of } from 'rxjs';
 import {
   MATERIAL_LABELS,
   Material,
@@ -10,6 +11,7 @@ import {
   Style,
   TYPE_LABELS,
 } from '../../core/models';
+import { FALLBACK_PRODUCTS } from '../../core/data/fallback-content';
 import { ApiService } from '../../core/services/api.service';
 import { CmsContentService } from '../../core/services/cms-content.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -94,11 +96,15 @@ export class CatalogComponent implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (data) => {
-          this.products.set(data);
+          const hasFilters = !!(this.material || this.style || this.type || this.search);
+          this.products.set(data.length || hasFilters ? data : FALLBACK_PRODUCTS);
           this.loading.set(false);
           this.scrollProductsToTop();
         },
-        error: () => this.loading.set(false),
+        error: () => {
+          this.products.set(FALLBACK_PRODUCTS);
+          this.loading.set(false);
+        },
       });
   }
 

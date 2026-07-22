@@ -22,12 +22,12 @@ export class ManageConsultationsComponent implements OnInit {
   reload(): void {
     this.api.consultations().subscribe({
       next: (list) => this.items.set(list),
-      error: () => this.error.set('Не удалось загрузить заявки'),
+      error: () => this.error.set('Не удалось загрузить обращения'),
     });
   }
 
   remove(item: ConsultationRequest): void {
-    if (!item.id || !confirm(`Удалить заявку от ${item.name}?`)) return;
+    if (!item.id || !confirm(`Удалить обращение от ${item.name}?`)) return;
     this.api.deleteConsultation(item.id).subscribe({
       next: () => this.items.update((list) => list.filter((x) => x.id !== item.id)),
     });

@@ -25,7 +25,7 @@ export class ManageDashboardComponent implements OnInit {
     { key: 'locations' as const, label: 'Адреса', link: '/manage/locations', color: '#d63638' },
     {
       key: 'consultations' as const,
-      label: 'Заявки',
+      label: 'Обращения',
       link: '/manage/consultations',
       color: '#1d2327',
     },

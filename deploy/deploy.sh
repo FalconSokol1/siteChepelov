@@ -54,6 +54,7 @@ ENV
 fi
 
 python manage.py migrate --noinput
+python manage.py seed_data
 python manage.py collectstatic --noinput
 mkdir -p media
 chown -R www-data:www-data media staticfiles 2>/dev/null || true

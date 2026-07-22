@@ -23,7 +23,7 @@ export class ManageLayoutComponent implements OnInit {
     { path: '/manage/portfolio', label: 'Портфолио', exact: false, icon: 'photo_library' },
     { path: '/manage/locations', label: 'Адреса', exact: false, icon: 'location_on' },
     { path: '/manage/reviews', label: 'Отзывы', exact: false, icon: 'reviews' },
-    { path: '/manage/consultations', label: 'Заявки', exact: false, icon: 'mail' },
+    { path: '/manage/consultations', label: 'Обращения', exact: false, icon: 'mail' },
   ];
 
   ngOnInit(): void {

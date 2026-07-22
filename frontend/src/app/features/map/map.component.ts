@@ -1,5 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { catchError, of } from 'rxjs';
 import { OfficeLocation } from '../../core/models';
+import { FALLBACK_LOCATIONS } from '../../core/data/fallback-content';
 import { ApiService } from '../../core/services/api.service';
 import { CmsContentService } from '../../core/services/cms-content.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -19,8 +21,8 @@ export class MapComponent implements OnInit {
   private readonly seo = inject(SeoService);
   readonly cms = inject(CmsContentService);
 
-  readonly locations = signal<OfficeLocation[]>([]);
-  readonly selectedId = signal<number | null>(null);
+  readonly locations = signal<OfficeLocation[]>(FALLBACK_LOCATIONS);
+  readonly selectedId = signal<number | null>(FALLBACK_LOCATIONS[0]?.id ?? null);
   readonly loading = signal(true);
 
   ngOnInit(): void {
@@ -30,10 +32,11 @@ export class MapComponent implements OnInit {
       description: 'Офис КавказКамень в пос. Родники, ул. Лесная, 70. Консультации и приём заказов.',
       url: '/map',
     });
-    this.api.getLocations().subscribe({
+    this.api.getLocations().pipe(catchError(() => of(FALLBACK_LOCATIONS))).subscribe({
       next: (data) => {
-        this.locations.set(data);
-        const office = data.find((l) => l.is_headquarters) ?? data[0];
+        const list = data.length ? data : FALLBACK_LOCATIONS;
+        this.locations.set(list);
+        const office = list.find((l) => l.is_headquarters) ?? list[0];
         if (office) this.selectedId.set(office.id);
         this.loading.set(false);
       },

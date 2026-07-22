@@ -40,7 +40,7 @@ const BLOCK_META: Record<string, { title: string; hint: string; imageHint?: stri
   },
   cta: {
     title: 'Призыв к действию',
-    hint: 'Нижний баннер с кнопкой «оставить заявку».',
+    hint: 'Нижний баннер с контактами (телефон / email).',
   },
   intro: {
     title: 'Вступление страницы',

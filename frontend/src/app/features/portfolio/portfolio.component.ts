@@ -1,5 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { catchError, of } from 'rxjs';
 import { PortfolioItem } from '../../core/models';
+import { FALLBACK_PORTFOLIO } from '../../core/data/fallback-content';
 import { ApiService } from '../../core/services/api.service';
 import { CmsContentService } from '../../core/services/cms-content.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -17,7 +19,7 @@ export class PortfolioComponent implements OnInit {
   private readonly api = inject(ApiService);
   private readonly seo = inject(SeoService);
   readonly cms = inject(CmsContentService);
-  readonly items = signal<PortfolioItem[]>([]);
+  readonly items = signal<PortfolioItem[]>(FALLBACK_PORTFOLIO);
   readonly loading = signal(true);
 
   ngOnInit(): void {
@@ -33,9 +35,9 @@ export class PortfolioComponent implements OnInit {
       name: 'Портфолио',
       url: 'https://kavkazkamen.ru/portfolio',
     });
-    this.api.getPortfolio().subscribe({
+    this.api.getPortfolio().pipe(catchError(() => of(FALLBACK_PORTFOLIO))).subscribe({
       next: (data) => {
-        this.items.set(data);
+        this.items.set(data.length ? data : FALLBACK_PORTFOLIO);
         this.loading.set(false);
       },
       error: () => this.loading.set(false),

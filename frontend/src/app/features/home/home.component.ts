@@ -149,20 +149,21 @@ export class HomeComponent implements OnInit {
     });
 
     this.api.getCategories().pipe(catchError(() => of(FALLBACK_CATEGORIES))).subscribe((d) => {
-      this.categories.set(d.slice(0, 8));
+      this.categories.set((d.length ? d : FALLBACK_CATEGORIES).slice(0, 8));
     });
     this.api.getProducts({ featured: true }).pipe(catchError(() => of(FALLBACK_PRODUCTS))).subscribe((d) => {
-      this.featuredProducts.set(d.slice(0, 4));
+      this.featuredProducts.set((d.length ? d : FALLBACK_PRODUCTS).slice(0, 4));
     });
     this.api.getReviews().pipe(catchError(() => of(FALLBACK_REVIEWS))).subscribe((d) => {
-      this.reviews.set(d);
+      this.reviews.set(d.length ? d : FALLBACK_REVIEWS);
     });
     this.api.getPortfolio().pipe(catchError(() => of(FALLBACK_PORTFOLIO))).subscribe((d) => {
-      this.portfolio.set(d);
+      this.portfolio.set(d.length ? d : FALLBACK_PORTFOLIO);
     });
     this.api.getLocations().pipe(catchError(() => of(FALLBACK_LOCATIONS))).subscribe((d) => {
-      this.locations.set(d);
-      const hq = d.find((l) => l.is_headquarters) ?? d[0];
+      const list = d.length ? d : FALLBACK_LOCATIONS;
+      this.locations.set(list);
+      const hq = list.find((l) => l.is_headquarters) ?? list[0];
       if (hq) this.selectedRegionCity.set(hq.id);
     });
   }

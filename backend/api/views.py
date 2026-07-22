@@ -136,14 +136,14 @@ class OfficeLocationListView(generics.ListAPIView):
 
 
 class ConsultationCreateView(APIView):
-    """Публичные заявки отключены — контакт по телефону / email / в офисе."""
+    """Публичные формы обратной связи отключены — контакт по телефону / email / в офисе."""
 
     permission_classes = [AllowAny]
     authentication_classes = []
 
     def post(self, request):
         return Response(
-            {'detail': 'Форма заявок отключена. Свяжитесь с нами по телефону или email.'},
+            {'detail': 'Форма обратной связи отключена. Свяжитесь с нами по телефону или email.'},
             status=status.HTTP_410_GONE,
         )
 

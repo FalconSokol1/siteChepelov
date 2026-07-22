@@ -1,7 +1,7 @@
 <div class="page">
   <header class="page__head">
-    <h1>Заявки на консультацию</h1>
-    <p>Заявки с сайта — имя, телефон, комментарий.</p>
+    <h1>Обращения</h1>
+    <p>Сообщения с сайта — имя, телефон, комментарий.</p>
   </header>
 
   @if (error()) {
@@ -10,7 +10,7 @@
 
   <div class="panel">
     @if (!items().length) {
-      <p class="empty">Пока нет заявок</p>
+      <p class="empty">Пока нет обращений</p>
     } @else {
       <table class="table">
         <thead>

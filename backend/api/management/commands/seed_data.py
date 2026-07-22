@@ -65,16 +65,68 @@ PORTFOLIO = [
 class Command(BaseCommand):
     help = 'Seed demo data for ИП Чепелов'
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--if-empty',
+            action='store_true',
+            help='Заполнить каталог только если в БД ещё нет товаров',
+        )
+
     def handle(self, *args, **options):
+        if options.get('if_empty'):
+            already = (
+                Category.objects.exists()
+                and Product.objects.exists()
+                and PortfolioItem.objects.exists()
+                and OfficeLocation.objects.exists()
+            )
+            if already:
+                self.stdout.write(self.style.WARNING('Каталог уже заполнен — seed пропущен.'))
+                return
+
+            # Частично пустая БД: дозаполняем только отсутствующие сущности без wipe
+            if (
+                Category.objects.exists()
+                or Product.objects.exists()
+                or PortfolioItem.objects.exists()
+                or OfficeLocation.objects.exists()
+                or Review.objects.exists()
+            ):
+                self._seed_missing()
+                return
+
         Category.objects.all().delete()
         Product.objects.all().delete()
         Review.objects.all().delete()
         PortfolioItem.objects.all().delete()
         OfficeLocation.objects.all().delete()
 
-        categories = {}
+        self._seed_all()
+        self.stdout.write(self.style.SUCCESS('Database seeded successfully.'))
+
+    def _seed_missing(self):
+        if not Category.objects.exists():
+            self._create_categories()
+        if not Product.objects.exists():
+            self._create_products()
+        if not Review.objects.exists():
+            self._create_reviews()
+        if not PortfolioItem.objects.exists():
+            self._create_portfolio()
+        if not OfficeLocation.objects.exists():
+            self._create_locations()
+        self.stdout.write(self.style.SUCCESS('Missing demo data filled.'))
+
+    def _seed_all(self):
+        self._create_categories()
+        self._create_products()
+        self._create_reviews()
+        self._create_portfolio()
+        self._create_locations()
+
+    def _create_categories(self):
         for index, (slug, title, price_from, image_url) in enumerate(CATEGORIES):
-            categories[slug] = Category.objects.create(
+            Category.objects.create(
                 slug=slug,
                 title=title,
                 price_from=price_from,
@@ -82,6 +134,8 @@ class Command(BaseCommand):
                 sort_order=index,
             )
 
+    def _create_products(self):
+        category = Category.objects.filter(slug='granite-monuments').first()
         for product in PRODUCTS:
             sku, slug, name, material, style, product_type, material_label, price, image_url, dimensions, finish, featured = product
             Product.objects.create(
@@ -97,10 +151,11 @@ class Command(BaseCommand):
                 dimensions=dimensions,
                 finish=finish,
                 featured=featured,
-                category=categories.get('granite-monuments'),
+                category=category,
                 description=f'Премиальный памятник «{name}» из коллекции KavkazKamen.',
             )
 
+    def _create_reviews(self):
         for index, (author, text, rating, image_url, is_video) in enumerate(REVIEWS):
             Review.objects.create(
                 author=author,
@@ -111,6 +166,7 @@ class Command(BaseCommand):
                 sort_order=index,
             )
 
+    def _create_portfolio(self):
         for index, (title, material, city, image_url) in enumerate(PORTFOLIO):
             PortfolioItem.objects.create(
                 title=title,
@@ -120,6 +176,7 @@ class Command(BaseCommand):
                 sort_order=index,
             )
 
+    def _create_locations(self):
         for slug, city, address, phone, lat, lng, hq, highlighted, region, projects, description in LOCATIONS:
             OfficeLocation.objects.create(
                 slug=slug,
@@ -134,5 +191,3 @@ class Command(BaseCommand):
                 projects_count=projects,
                 description=description,
             )
-
-        self.stdout.write(self.style.SUCCESS('Database seeded successfully.'))
