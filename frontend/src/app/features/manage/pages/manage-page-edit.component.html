@@ -37,14 +37,23 @@
             <input type="checkbox" [(ngModel)]="page.is_published" name="is_published" />
             Опубликована
           </label>
-          <label class="field field--full">
-            <span>SEO-заголовок</span>
-            <input [(ngModel)]="page.meta_title" name="meta_title" />
-          </label>
-          <label class="field field--full">
-            <span>SEO-описание</span>
-            <textarea [(ngModel)]="page.meta_description" name="meta_description" rows="3"></textarea>
-          </label>
+          <div class="seo-panel field--full">
+            <h3 class="seo-panel__title">SEO (поиск и соцсети)</h3>
+            <p class="seo-panel__hint">
+              Эти поля попадают в &lt;title&gt;, meta description, Open Graph и Twitter Card.
+              Если пусто — на сайте подставятся значения по умолчанию.
+            </p>
+            <label class="field field--full">
+              <span>SEO-заголовок (до 60 символов)</span>
+              <input [(ngModel)]="page.meta_title" name="meta_title" maxlength="120" placeholder="КавказКамень — памятники из гранита" />
+              <small class="seo-panel__count">{{ (page.meta_title || '').length }} / 60</small>
+            </label>
+            <label class="field field--full">
+              <span>SEO-описание (до 160 символов)</span>
+              <textarea [(ngModel)]="page.meta_description" name="meta_description" rows="3" maxlength="320" placeholder="Кратко: что делаете, где, для кого"></textarea>
+              <small class="seo-panel__count">{{ (page.meta_description || '').length }} / 160</small>
+            </label>
+          </div>
         </div>
       </div>
 

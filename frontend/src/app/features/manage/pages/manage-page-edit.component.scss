@@ -163,3 +163,33 @@ code {
   padding: 0.1rem 0.35rem;
   font-size: 0.85em;
 }
+
+.seo-panel {
+  margin-top: 0.5rem;
+  padding: 1rem;
+  border: 1px solid #dcdcde;
+  background: #f6f7f7;
+
+  &__title {
+    margin: 0 0 0.35rem;
+    font-size: 0.95rem;
+  }
+
+  &__hint {
+    margin: 0 0 1rem;
+    color: #646970;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  &__count {
+    display: block;
+    margin-top: 0.35rem;
+    color: #646970;
+    font-size: 0.75rem;
+  }
+
+  .field {
+    margin-bottom: 0.85rem;
+  }
+}

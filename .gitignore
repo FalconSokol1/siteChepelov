@@ -3,6 +3,16 @@
 *.env.local
 backend/.env
 
+# Private credentials (passwords, keys notes)
+docs/private/ACCESS.md
+docs/private/*.local.md
+**/ACCESS.local.md
+deploy-credentials*
+*.pem
+*.ppk
+kavkazkamen_deploy
+kavkazkamen_deploy.pub
+
 # Python
 __pycache__/
 *.py[cod]

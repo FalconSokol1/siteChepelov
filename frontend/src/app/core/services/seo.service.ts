@@ -14,7 +14,7 @@ export interface SeoConfig {
 const DEFAULT_TITLE = 'КавказКамень - производство и установка памятников';
 const DEFAULT_DESCRIPTION =
   'КавказКамень — производство и установка памятников из гранита и мрамора. пос. Родники, Краснодарский край. Доставка и монтаж по всей России.';
-const DEFAULT_IMAGE = '/logo.png';
+const DEFAULT_IMAGE = '/android-chrome-512x512.png';
 
 export function cmsSlugToPath(slug: string): string | null {
   if (slug === 'global' || slug === 'product') return null;

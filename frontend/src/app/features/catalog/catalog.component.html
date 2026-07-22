@@ -1,12 +1,9 @@
 <app-header />
 <main class="catalog">
-  <header class="page-intro page-intro--row container">
+  <header class="page-intro container">
     <div class="page-intro__copy">
       <h1 class="page-intro__title">{{ cms.text('catalog', 'intro', 'title', 'Каталог памятников') }}</h1>
     </div>
-    @if (!loading()) {
-      <p class="page-intro__meta">{{ products().length }} моделей · {{ cms.text('catalog', 'intro', 'body', 'ИП Чепелов Д.В.') }}</p>
-    }
   </header>
 
   @if (filtersOpen()) {

@@ -25,7 +25,7 @@ export class ReviewsComponent implements OnInit {
     this.cms.load('reviews').subscribe();
     this.seo.update({
       title: 'Отзывы клиентов — КавказКамень',
-      description: 'Отзывы о производстве и установке памятников ИП Чепелов Д.В.',
+      description: 'Отзывы клиентов о памятниках и работе КавказКамень.',
       url: '/reviews',
     });
     this.seo.setJsonLd('reviews-page', {

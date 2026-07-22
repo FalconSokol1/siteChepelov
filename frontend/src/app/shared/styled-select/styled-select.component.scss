@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
+  isolation: isolate;
 
   &__label {
     font-size: 0.6875rem;
@@ -21,17 +22,20 @@
     padding: 0.6875rem 0.875rem;
     border: 1px solid rgba(13, 13, 13, 0.14);
     border-radius: 0;
-    background: #fff;
+    background: #ffffff;
     font-family: inherit;
     font-size: 0.875rem;
     line-height: 1.4;
-    color: var(--color-primary);
+    color: #0d0d0d;
     text-align: left;
     cursor: pointer;
     transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
 
     @media (max-width: 900px) {
       font-size: 16px;
+      background: #ffffff;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
     &:hover:not(:disabled) {
@@ -52,6 +56,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: #0d0d0d;
   }
 
   &__chevron {
@@ -61,8 +66,12 @@
     transition: transform 0.2s ease;
   }
 
-  &--open &__chevron {
-    transform: rotate(180deg);
+  &--open {
+    z-index: 50;
+
+    .styled-select__chevron {
+      transform: rotate(180deg);
+    }
   }
 
   &__list {
@@ -70,16 +79,17 @@
     top: calc(100% + 0.25rem);
     left: 0;
     right: 0;
-    z-index: 40;
+    z-index: 60;
     margin: 0;
     padding: 0.375rem 0;
     list-style: none;
     max-height: min(16rem, 45dvh);
     overflow-y: auto;
-    background: #fff;
-    border: 1px solid rgba(183, 154, 114, 0.35);
-    box-shadow: 0 16px 36px rgba(13, 13, 13, 0.14);
+    background: #ffffff;
+    border: 1px solid rgba(183, 154, 114, 0.45);
+    box-shadow: 0 16px 36px rgba(13, 13, 13, 0.18);
     -webkit-overflow-scrolling: touch;
+    color: #0d0d0d;
   }
 
   &__option {
@@ -87,30 +97,36 @@
     width: 100%;
     padding: 0.75rem 0.875rem;
     border: none;
-    background: transparent;
+    background: #ffffff;
     font-family: inherit;
     font-size: 0.875rem;
     line-height: 1.4;
-    color: var(--color-primary);
+    color: #0d0d0d;
     text-align: left;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
 
+    @media (max-width: 900px) {
+      font-size: 16px;
+      min-height: 2.75rem;
+    }
+
     &:hover,
     &--active {
-      background: rgba(183, 154, 114, 0.14);
-      color: var(--color-primary);
+      background: #f3ebe0;
+      color: #0d0d0d;
     }
 
     &--active {
       font-weight: 600;
       color: var(--color-bordeaux);
+      background: #efe4d4;
     }
   }
 
   &--disabled &__trigger {
     opacity: 0.45;
     cursor: not-allowed;
-    background: var(--color-secondary-container);
+    background: #f3f1ee;
   }
 }

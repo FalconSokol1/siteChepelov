@@ -9,8 +9,8 @@ import { ManageMediaFieldComponent } from '../shared/manage-media-field.componen
 const BLOCK_META: Record<string, { title: string; hint: string; imageHint?: string }> = {
   hero: {
     title: 'Герой (первый экран)',
-    hint: 'Крупный заголовок и кнопка на главной. Картинка — фон или фото справа/на весь экран.',
-    imageHint: 'Широкое атмосферное фото камня или готовой работы, 1600×900 и больше',
+    hint: 'Крупный заголовок и кнопки. 3D-модель справа задаётся в коде (см. docs/HERO_3D_MODEL.md), не этим полем.',
+    imageHint: 'Фоновое фото не обязательно — сцена 3D. Для OG/соцсетей используйте логотип или фото работы',
   },
   categories: {
     title: 'Категории на главной',

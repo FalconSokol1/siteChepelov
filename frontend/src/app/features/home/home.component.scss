@@ -218,6 +218,62 @@
   background: var(--color-bg);
 }
 
+.section__header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+  width: 100%;
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-primary);
+    max-width: 36rem;
+  }
+
+  p {
+    margin: 0;
+    max-width: 36rem;
+    color: var(--color-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  &--row {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+
+    > div {
+      min-width: 0;
+      text-align: left;
+    }
+  }
+}
+
+.page-intro--section {
+  text-align: left;
+
+  .page-intro__title,
+  .page-intro__lead {
+    text-align: left;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .page-intro__lead {
+    max-width: 36rem;
+  }
+}
+
 .categories-section,
 .materials-section {
   .section__header h2 {
