@@ -17,7 +17,7 @@
             <div class="review-card__main">
               <div class="review-card__head">
                 <strong class="review-card__author">{{ r.author }}</strong>
-                <div class="review-card__stars" aria-label="Оценка {{ r.rating }} из 5">
+                <div class="review-card__stars" [attr.aria-label]="'Оценка ' + r.rating + ' из 5'">
                   @for (s of stars(r.rating); track s) {
                     <span class="material-symbols-outlined">star</span>
                   }
