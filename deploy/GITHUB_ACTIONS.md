@@ -1,49 +1,47 @@
-# GitHub Actions CI/CD — настройка секретов
+# GitHub Actions CI/CD
 
 Репозиторий: https://github.com/FalconSokol1/siteChepelov
 
-## Что уже есть
+## Как деплоим
 
-| Workflow | Когда | Что делает |
-|----------|--------|------------|
-| `.github/workflows/ci.yml` | push / PR в `main` | проверка Django + сборка Angular |
-| `.github/workflows/deploy.yml` | push в `main` или вручную | заливка на сервер + migrate + restart |
+Файлы **не копируются с ПК**. На сервере:
 
-## Секреты (обязательно для деплоя)
-
-GitHub → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
-
-| Secret | Пример | Описание |
-|--------|--------|----------|
-| `DEPLOY_HOST` | `201.51.12.106` | IP или hostname сервера |
-| `DEPLOY_USER` | `root` | SSH-пользователь |
-| `DEPLOY_SSH_KEY` | `-----BEGIN OPENSSH PRIVATE KEY-----...` | Приватный ключ целиком |
-| `DEPLOY_PORT` | `22` | необязательно, по умолчанию 22 |
-
-### Создать ключ на своём ПК
-
-```powershell
-ssh-keygen -t ed25519 -f $env:USERPROFILE\.ssh\kavkazkamen_deploy -N '""' -C "github-actions-deploy"
+```bash
+git clone https://github.com/FalconSokol1/siteChepelov.git /var/www/kavkazkamen
+# дальше обновления:
+cd /var/www/kavkazkamen && git fetch && git reset --hard origin/main
 ```
 
-Публичный ключ на сервер:
+Сборка (`npm` / `pip`) идёт **на сервере**.
+
+## Вручную с Windows
 
 ```powershell
-type $env:USERPROFILE\.ssh\kavkazkamen_deploy.pub | ssh root@201.51.12.106 "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys"
+cd "c:\Users\jtj68\OneDrive\Рабочий стол\сайт чепелов"
+.\deploy\deploy.ps1
 ```
 
-Приватный ключ (`kavkazkamen_deploy` без `.pub`) — целиком в секрет `DEPLOY_SSH_KEY`.
+Скрипт только подключается по SSH и на сервере делает `git clone`/`git pull` + build + restart.
 
-### Environment
+Или сами на сервере:
 
-В workflow указан `environment: production`.  
-GitHub → **Settings** → **Environments** → создайте `production` (можно с approval перед деплоем).
+```bash
+ssh root@201.51.12.106
+cd /var/www
+git clone https://github.com/FalconSokol1/siteChepelov.git kavkazkamen
+# если уже есть:
+cd /var/www/kavkazkamen && git pull
+```
 
-## На сервере один раз
+## Секреты для автодеплоя (Actions)
 
-1. Установить nginx, python, node (см. README).
-2. Создать `/var/www/kavkazkamen/backend/.env` (деплой **не** перезаписывает `.env`).
-3. Открыть порты 22, 80, 443.
-4. DNS → IP сервера.
+GitHub → Settings → Secrets → Actions:
 
-После этого каждый `git push origin main` запускает CI и Deploy.
+| Secret | Пример |
+|--------|--------|
+| `DEPLOY_HOST` | `201.51.12.106` |
+| `DEPLOY_USER` | `root` |
+| `DEPLOY_SSH_KEY` | приватный SSH-ключ |
+| `DEPLOY_PORT` | `22` (необязательно) |
+
+После настройки каждый `git push origin main` обновит сервер через `git pull`.

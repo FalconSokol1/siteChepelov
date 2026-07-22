@@ -26,14 +26,29 @@
 
 Автосборка и выкладка через GitHub Actions — см. [`deploy/GITHUB_ACTIONS.md`](deploy/GITHUB_ACTIONS.md).
 
+Код на сервер идёт через **`git clone` / `git pull`** (не через медленный scp/rsync с ПК).
+
 Нужны секреты репозитория: `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`.
 
-### Вручную
+### Вручную (быстро)
+
+На сервере:
 
 ```bash
-# с машины разработчика (нужен SSH и rsync)
-bash deploy/deploy.sh root@201.51.12.106
+ssh root@201.51.12.106
+cd /var/www
+git clone https://github.com/FalconSokol1/siteChepelov.git kavkazkamen
+# если папка уже есть:
+cd /var/www/kavkazkamen && git pull
 ```
+
+Или с Windows одной командой (SSH + git на сервере):
+
+```powershell
+.\deploy\deploy.ps1
+```
+
+Старый вариант с rsync/scp больше не нужен.
 
 Скрипт:
 1. синхронизирует код в `/var/www/kavkazkamen`

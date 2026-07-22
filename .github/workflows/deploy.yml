@@ -11,27 +11,12 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy to production
+    name: Deploy via git pull on server
     runs-on: ubuntu-latest
-    # Skip if secrets are not configured yet
     if: ${{ secrets.DEPLOY_HOST != '' && secrets.DEPLOY_SSH_KEY != '' }}
     environment: production
 
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Build frontend
-        working-directory: frontend
-        run: |
-          npm ci
-          npm run build -- --configuration=production
-
       - name: Setup SSH
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
@@ -54,46 +39,40 @@ jobs:
             StrictHostKeyChecking accept-new
           EOF
 
-      - name: Sync code to server
-        run: |
-          APP_DIR="/var/www/kavkazkamen"
-          ssh deploy "mkdir -p ${APP_DIR}"
-          rsync -az --delete \
-            -e "ssh" \
-            --exclude '.git' \
-            --exclude 'node_modules' \
-            --exclude 'frontend/node_modules' \
-            --exclude 'backend/.venv' \
-            --exclude 'backend/db.sqlite3' \
-            --exclude 'backend/media' \
-            --exclude 'backend/staticfiles' \
-            --exclude 'backend/.env' \
-            --exclude '__pycache__' \
-            --exclude '.github' \
-            ./ deploy:${APP_DIR}/
-
-          # Upload prebuilt frontend
-          rsync -az --delete \
-            -e "ssh" \
-            frontend/dist/frontend/browser/ \
-            deploy:${APP_DIR}/frontend/dist/frontend/browser/
-
-      - name: Remote migrate and restart
+      - name: Git pull + build + restart on server
         run: |
           ssh deploy bash -s <<'EOF'
           set -euo pipefail
           APP_DIR=/var/www/kavkazkamen
-          cd "${APP_DIR}/backend"
+          REPO_URL=https://github.com/FalconSokol1/siteChepelov.git
+          export DEBIAN_FRONTEND=noninteractive
 
-          if [ ! -d .venv ]; then
-            python3 -m venv .venv
+          apt-get update -qq
+          apt-get install -y -qq nginx python3 python3-venv python3-pip git curl
+
+          if ! command -v node >/dev/null 2>&1; then
+            curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+            apt-get install -y -qq nodejs
           fi
+
+          mkdir -p /var/www
+          if [ ! -d "${APP_DIR}/.git" ]; then
+            rm -rf "${APP_DIR}"
+            git clone "${REPO_URL}" "${APP_DIR}"
+          else
+            cd "${APP_DIR}"
+            git fetch origin
+            git reset --hard origin/main
+          fi
+
+          cd "${APP_DIR}/backend"
+          python3 -m venv .venv
           source .venv/bin/activate
           pip install -q --upgrade pip
           pip install -q -r requirements.txt
 
           if [ ! -f .env ]; then
-            echo "ERROR: ${APP_DIR}/backend/.env missing on server. Create it once manually." >&2
+            echo "ERROR: ${APP_DIR}/backend/.env missing. Create it once on the server." >&2
             exit 1
           fi
 
@@ -102,15 +81,15 @@ jobs:
           mkdir -p media
           chown -R www-data:www-data media staticfiles 2>/dev/null || true
 
-          # Ensure systemd unit is installed
-          if [ -f "${APP_DIR}/deploy/kavkazkamen.service" ]; then
-            cp "${APP_DIR}/deploy/kavkazkamen.service" /etc/systemd/system/kavkazkamen.service
-            systemctl daemon-reload
-            systemctl enable kavkazkamen
-          fi
+          cd "${APP_DIR}/frontend"
+          npm ci --prefer-offline || npm install
+          npm run build -- --configuration=production
+
+          cp "${APP_DIR}/deploy/kavkazkamen.service" /etc/systemd/system/kavkazkamen.service
+          systemctl daemon-reload
+          systemctl enable kavkazkamen
           systemctl restart kavkazkamen
 
-          # Nginx configs (do not overwrite TLS setup blindly if live certs exist)
           if [ -f /etc/letsencrypt/live/kavkazkamen.ru/fullchain.pem ]; then
             cp "${APP_DIR}/deploy/nginx-kavkazkamen.conf" /etc/nginx/sites-available/kavkazkamen
           else
@@ -119,7 +98,6 @@ jobs:
           ln -sfn /etc/nginx/sites-available/kavkazkamen /etc/nginx/sites-enabled/kavkazkamen
           nginx -t
           systemctl reload nginx
-
           curl -fsS http://127.0.0.1:8000/api/health/ || true
           echo "Deploy OK"
           EOF
