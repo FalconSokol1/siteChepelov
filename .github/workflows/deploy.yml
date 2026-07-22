@@ -13,10 +13,19 @@ jobs:
   deploy:
     name: Deploy via git pull on server
     runs-on: ubuntu-latest
-    if: ${{ secrets.DEPLOY_HOST != '' && secrets.DEPLOY_SSH_KEY != '' }}
     environment: production
 
     steps:
+      - name: Check deploy secrets
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          if [ -z "$DEPLOY_HOST" ] || [ -z "$DEPLOY_SSH_KEY" ]; then
+            echo "Задайте секреты DEPLOY_HOST и DEPLOY_SSH_KEY (Settings → Secrets → Actions)." >&2
+            exit 1
+          fi
+
       - name: Setup SSH
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
