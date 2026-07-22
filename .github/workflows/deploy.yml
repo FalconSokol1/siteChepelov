@@ -33,20 +33,40 @@ jobs:
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
         run: |
+          set -euo pipefail
           mkdir -p ~/.ssh
-          echo "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          chmod 700 ~/.ssh
+
+          # Нормализуем ключ: убираем CRLF (Windows) и гарантируем перевод строки в конце
+          printf '%s\n' "$DEPLOY_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
+
+          if ! grep -q "BEGIN .*PRIVATE KEY" ~/.ssh/deploy_key; then
+            echo "DEPLOY_SSH_KEY должен быть приватным ключом OpenSSH (BEGIN ... PRIVATE KEY)." >&2
+            exit 1
+          fi
+          if ! ssh-keygen -y -f ~/.ssh/deploy_key >/dev/null 2>&1; then
+            echo "Ключ повреждён (ошибка libcrypto). Пересоздайте ключ и вставьте весь файл целиком в секрет." >&2
+            exit 1
+          fi
+
           PORT="${DEPLOY_PORT:-22}"
           USER_NAME="${DEPLOY_USER:-root}"
           ssh-keyscan -p "$PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
-          cat >> ~/.ssh/config <<EOF
+
+          cat > ~/.ssh/config <<EOF
           Host deploy
             HostName ${DEPLOY_HOST}
             User ${USER_NAME}
             Port ${PORT}
             IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes
+            PreferredAuthentications publickey
             StrictHostKeyChecking accept-new
           EOF
+          # Убираем ведущие пробелы из YAML-индента в ssh config
+          sed -i 's/^[[:space:]]\+//' ~/.ssh/config
+          chmod 600 ~/.ssh/config
 
       - name: Git pull + build + restart on server
         run: |
