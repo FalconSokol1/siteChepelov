@@ -13,7 +13,6 @@ jobs:
   deploy:
     name: Deploy via git pull on server
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
       - name: Check deploy secrets
@@ -22,60 +21,51 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           if [ -z "$DEPLOY_HOST" ] || [ -z "$DEPLOY_SSH_KEY" ]; then
-            echo "Задайте секреты DEPLOY_HOST и DEPLOY_SSH_KEY (Settings → Secrets → Actions)." >&2
+            echo "Задайте РЕПОЗИТОРНЫЕ секреты DEPLOY_HOST и DEPLOY_SSH_KEY:" >&2
+            echo "Settings → Secrets and variables → Actions (не Environment)." >&2
             exit 1
           fi
 
-      - name: Setup SSH
+      - name: Decode SSH key (base64)
         env:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          KEY_RAW=$(printf '%s' "$DEPLOY_SSH_KEY" | tr -d '\r\n ')
+          printf '%s' "$KEY_RAW" | base64 -d > ~/.ssh/deploy_key
+          if [ "$(tail -c1 ~/.ssh/deploy_key | wc -l)" -eq 0 ]; then
+            printf '\n' >> ~/.ssh/deploy_key
+          fi
+          chmod 600 ~/.ssh/deploy_key
+          if ! grep -q "BEGIN OPENSSH PRIVATE KEY\|BEGIN .* PRIVATE KEY" ~/.ssh/deploy_key; then
+            echo "После base64 нет PRIVATE KEY. В секрет нужен base64 приватного файла, не .pub." >&2
+            exit 1
+          fi
+          ssh-keygen -y -f ~/.ssh/deploy_key >/dev/null
+          echo "SSH key OK"
+          ssh-keygen -lf ~/.ssh/deploy_key
+
+      - name: Trust host
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          PORT="${DEPLOY_PORT:-22}"
+          ssh-keyscan -p "$PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
+
+      - name: Git pull + build + restart on server
+        env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
         run: |
           set -euo pipefail
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          # Поддержка: сырой ключ ИЛИ base64 (надёжнее для Windows → GitHub Secrets)
-          KEY_RAW=$(printf '%s' "$DEPLOY_SSH_KEY" | tr -d '\r')
-          if printf '%s' "$KEY_RAW" | grep -q "BEGIN .*PRIVATE KEY"; then
-            printf '%s\n' "$KEY_RAW" > ~/.ssh/deploy_key
-          else
-            printf '%s' "$KEY_RAW" | base64 -d > ~/.ssh/deploy_key
-            printf '\n' >> ~/.ssh/deploy_key
-          fi
-          chmod 600 ~/.ssh/deploy_key
-
-          if ! grep -q "BEGIN .*PRIVATE KEY" ~/.ssh/deploy_key; then
-            echo "DEPLOY_SSH_KEY: нужен приватный ключ или его base64 (не .pub)." >&2
-            exit 1
-          fi
-          if ! ssh-keygen -y -f ~/.ssh/deploy_key >/dev/null 2>&1; then
-            echo "Ключ повреждён. Вставьте base64 приватного ключа (см. deploy/GITHUB_ACTIONS.md)." >&2
-            exit 1
-          fi
-
           PORT="${DEPLOY_PORT:-22}"
           USER_NAME="${DEPLOY_USER:-root}"
-          ssh-keyscan -p "$PORT" -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
-
-          cat > ~/.ssh/config <<EOF
-          Host deploy
-            HostName ${DEPLOY_HOST}
-            User ${USER_NAME}
-            Port ${PORT}
-            IdentityFile ~/.ssh/deploy_key
-            IdentitiesOnly yes
-            PreferredAuthentications publickey
-            StrictHostKeyChecking accept-new
-          EOF
-          sed -i 's/^[[:space:]]\+//' ~/.ssh/config
-          chmod 600 ~/.ssh/config
-
-      - name: Git pull + build + restart on server
-        run: |
-          ssh deploy bash -s <<'EOF'
+          ssh -o IdentitiesOnly=yes -o PreferredAuthentications=publickey \
+            -i ~/.ssh/deploy_key -p "$PORT" "${USER_NAME}@${DEPLOY_HOST}" bash -s <<'EOF'
           set -euo pipefail
           APP_DIR=/var/www/kavkazkamen
           REPO_URL=https://github.com/FalconSokol1/siteChepelov.git
