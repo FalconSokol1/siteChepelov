@@ -37,16 +37,22 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
 
-          # Нормализуем ключ: убираем CRLF (Windows) и гарантируем перевод строки в конце
-          printf '%s\n' "$DEPLOY_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          # Поддержка: сырой ключ ИЛИ base64 (надёжнее для Windows → GitHub Secrets)
+          KEY_RAW=$(printf '%s' "$DEPLOY_SSH_KEY" | tr -d '\r')
+          if printf '%s' "$KEY_RAW" | grep -q "BEGIN .*PRIVATE KEY"; then
+            printf '%s\n' "$KEY_RAW" > ~/.ssh/deploy_key
+          else
+            printf '%s' "$KEY_RAW" | base64 -d > ~/.ssh/deploy_key
+            printf '\n' >> ~/.ssh/deploy_key
+          fi
           chmod 600 ~/.ssh/deploy_key
 
           if ! grep -q "BEGIN .*PRIVATE KEY" ~/.ssh/deploy_key; then
-            echo "DEPLOY_SSH_KEY должен быть приватным ключом OpenSSH (BEGIN ... PRIVATE KEY)." >&2
+            echo "DEPLOY_SSH_KEY: нужен приватный ключ или его base64 (не .pub)." >&2
             exit 1
           fi
           if ! ssh-keygen -y -f ~/.ssh/deploy_key >/dev/null 2>&1; then
-            echo "Ключ повреждён (ошибка libcrypto). Пересоздайте ключ и вставьте весь файл целиком в секрет." >&2
+            echo "Ключ повреждён. Вставьте base64 приватного ключа (см. deploy/GITHUB_ACTIONS.md)." >&2
             exit 1
           fi
 
@@ -64,7 +70,6 @@ jobs:
             PreferredAuthentications publickey
             StrictHostKeyChecking accept-new
           EOF
-          # Убираем ведущие пробелы из YAML-индента в ssh config
           sed -i 's/^[[:space:]]\+//' ~/.ssh/config
           chmod 600 ~/.ssh/config
 

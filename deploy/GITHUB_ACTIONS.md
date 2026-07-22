@@ -41,22 +41,26 @@ GitHub → **Settings → Secrets and variables → Actions** (или Environmen
 |--------|--------|
 | `DEPLOY_HOST` | `201.51.12.106` |
 | `DEPLOY_USER` | `root` |
-| `DEPLOY_SSH_KEY` | **весь** приватный ключ OpenSSH |
+| `DEPLOY_SSH_KEY` | **base64** приватного ключа |
 | `DEPLOY_PORT` | `22` (необязательно) |
 
 ### Как правильно создать ключ (Windows PowerShell)
 
-Ошибка `libcrypto` / «Отказано в доступе» почти всегда из‑за битого ключа в секрете.
+Ошибка `libcrypto` почти всегда из‑за битого ключа в секрете (пропали переносы строк при вставке).
 
 ```powershell
-# 1) Новый ключ БЕЗ пароля (только для деплоя)
+# 1) Новый ключ БЕЗ пароля
 ssh-keygen -t ed25519 -C "github-actions-kavkazkamen" -f $env:USERPROFILE\.ssh\kavkazkamen_deploy -N '""'
 
-# 2) Публичный ключ — добавь на сервер в authorized_keys
+# 2) Публичный — на сервер в authorized_keys
 Get-Content $env:USERPROFILE\.ssh\kavkazkamen_deploy.pub
+
+# 3) Для GitHub — base64 в буфер обмена
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:USERPROFILE\.ssh\kavkazkamen_deploy")) | Set-Clipboard
+Write-Host "Base64 скопирован — вставь в секрет DEPLOY_SSH_KEY"
 ```
 
-На сервере (под `root` или тем пользователем, что в `DEPLOY_USER`):
+На сервере:
 
 ```bash
 mkdir -p ~/.ssh && chmod 700 ~/.ssh
@@ -64,14 +68,10 @@ echo 'СЮДА_СТРОКУ_ИЗ_.pub' >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 ```
 
-В секрет `DEPLOY_SSH_KEY` вставь **весь** файл `kavkazkamen_deploy` (приватный), от строки  
-`-----BEGIN OPENSSH PRIVATE KEY-----` до `-----END OPENSSH PRIVATE KEY-----` включительно.  
-Не `.pub`, не `.ppk`, без кавычек и без лишних пробелов.
-
 Проверка с ПК:
 
 ```powershell
 ssh -i $env:USERPROFILE\.ssh\kavkazkamen_deploy root@201.51.12.106 "echo OK"
 ```
 
-После настройки каждый `git push origin main` или **Actions → Deploy → Run workflow** обновит сервер.
+После настройки: **Actions → Deploy → Run workflow**.
