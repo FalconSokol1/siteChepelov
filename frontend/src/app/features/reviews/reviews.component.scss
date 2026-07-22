@@ -1,21 +1,22 @@
 .reviews-page {
+  width: 100%;
+
   &__layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.25rem;
+    display: block;
     width: 100%;
-    max-width: min(52rem, 100%);
-    margin-inline: auto;
+    max-width: none;
     padding-bottom: 4rem;
     box-sizing: border-box;
 
     &--single {
-      grid-template-columns: minmax(0, 1fr);
-      max-width: min(52rem, 100%);
+      max-width: none;
     }
   }
 
   &__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
     width: 100%;
     min-width: 0;
   }
@@ -28,6 +29,7 @@
 .reviews-page .page-intro {
   position: relative;
   text-align: left;
+  width: 100%;
 
   .page-intro__title,
   .page-intro__lead {
@@ -51,10 +53,9 @@
 
 .review-card {
   border: 1px solid rgba(13, 13, 13, 0.08);
-  padding: 1.5rem 1.5rem 1.5rem 1.75rem;
-  margin-bottom: 1rem;
+  padding: 1.5rem 1.75rem;
   width: 100%;
-  max-width: 100%;
+  max-width: none;
   box-sizing: border-box;
   background: #fff;
   position: relative;
@@ -99,7 +100,7 @@
   &__photo {
     display: block;
     margin-top: 1rem;
-    max-width: min(100%, 320px);
+    max-width: min(100%, 420px);
     border: 1px solid rgba(13, 13, 13, 0.1);
     overflow: hidden;
 
@@ -116,10 +117,15 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (min-width: 900px) {
+  .reviews-page__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 899px) {
   .reviews-page__layout {
-    max-width: 100%;
-    gap: 1rem;
     padding-bottom: 3rem;
   }
 
