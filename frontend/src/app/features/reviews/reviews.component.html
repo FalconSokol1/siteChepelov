@@ -5,7 +5,7 @@
     <p class="page-intro__lead">{{ cms.text('reviews', 'intro', 'body', 'Реальные отзывы клиентов о памятниках и работе КавказКамень.') }}</p>
   </header>
 
-  <div class="reviews-page__layout container reviews-page__layout--single">
+  <div class="reviews-page__layout container">
     <section class="reviews-page__list">
       @if (loading()) {
         <p>{{ cms.data('reviews', 'list', 'loading', 'Загрузка отзывов...') }}</p>
@@ -13,16 +13,18 @@
         <p class="reviews-page__empty">{{ cms.data('reviews', 'list', 'empty', 'Пока нет опубликованных отзывов.') }}</p>
       } @else {
         @for (r of reviews(); track r.id) {
-          <article class="review-card">
-            <div class="review-card__head">
-              <strong>{{ r.author }}</strong>
-              <div class="review-card__stars">
-                @for (s of stars(r.rating); track s) {
-                  <span class="material-symbols-outlined">star</span>
-                }
+          <article class="review-card" [class.review-card--with-photo]="!!r.image_url">
+            <div class="review-card__main">
+              <div class="review-card__head">
+                <strong class="review-card__author">{{ r.author }}</strong>
+                <div class="review-card__stars" aria-label="Оценка {{ r.rating }} из 5">
+                  @for (s of stars(r.rating); track s) {
+                    <span class="material-symbols-outlined">star</span>
+                  }
+                </div>
               </div>
+              <p class="review-card__text">{{ r.text }}</p>
             </div>
-            <p>{{ r.text }}</p>
             @if (r.image_url) {
               <a class="review-card__photo" [href]="r.image_url" target="_blank" rel="noopener">
                 <img [src]="r.image_url" [alt]="cms.data('reviews', 'list', 'photo_alt', 'Фото от') + ' ' + r.author" loading="lazy" />

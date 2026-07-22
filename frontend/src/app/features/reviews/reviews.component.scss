@@ -2,26 +2,20 @@
   width: 100%;
 
   &__layout {
-    display: block;
     width: 100%;
-    max-width: none;
-    padding-bottom: 4rem;
+    padding-bottom: 3.5rem;
     box-sizing: border-box;
-
-    &--single {
-      max-width: none;
-    }
   }
 
   &__list {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
     width: 100%;
-    min-width: 0;
   }
 
   &__empty {
+    margin: 0;
     color: var(--color-secondary);
   }
 }
@@ -29,12 +23,11 @@
 .reviews-page .page-intro {
   position: relative;
   text-align: left;
-  width: 100%;
 
   .page-intro__title,
   .page-intro__lead {
     text-align: left;
-    max-width: 40rem;
+    max-width: 36rem;
   }
 
   &::after {
@@ -52,84 +45,127 @@
 }
 
 .review-card {
-  border: 1px solid rgba(13, 13, 13, 0.08);
-  padding: 1.5rem 1.75rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 0.85rem 1.25rem;
   width: 100%;
-  max-width: none;
   box-sizing: border-box;
+  padding: 0.9rem 1.15rem 0.9rem 1.2rem;
+  border: 1px solid rgba(13, 13, 13, 0.08);
   background: #fff;
   position: relative;
-  overflow: hidden;
 
   &::before {
     content: '';
     position: absolute;
-    top: 0;
+    top: 0.65rem;
+    bottom: 0.65rem;
     left: 0;
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(180deg, var(--color-champagne), rgba(183, 154, 114, 0.2));
+    width: 2px;
+    background: var(--color-champagne);
+    opacity: 0.85;
+  }
+
+  &--with-photo {
+    grid-template-columns: minmax(0, 1fr) 5.5rem;
+  }
+
+  &__main {
+    min-width: 0;
   }
 
   &__head {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+  }
+
+  &__author {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--color-primary);
   }
 
   &__stars {
     display: flex;
-    gap: 0.125rem;
+    gap: 0.05rem;
     color: var(--color-champagne);
     flex-shrink: 0;
 
     .material-symbols-outlined {
-      font-size: 1rem;
+      font-size: 0.95rem;
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
     }
   }
 
-  p {
+  &__text {
     margin: 0;
-    line-height: 1.75;
+    font-size: 0.875rem;
+    line-height: 1.55;
     color: var(--color-secondary);
-    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
   }
 
   &__photo {
     display: block;
-    margin-top: 1rem;
-    max-width: min(100%, 420px);
+    width: 5.5rem;
+    height: 5.5rem;
+    flex-shrink: 0;
     border: 1px solid rgba(13, 13, 13, 0.1);
     overflow: hidden;
+    align-self: center;
 
     img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
       display: block;
-      transition: transform 0.5s var(--ease-luxury);
-    }
-
-    &:hover img {
-      transform: scale(1.04);
     }
   }
 }
 
 @media (min-width: 900px) {
-  .reviews-page__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem;
+  .review-card {
+    padding: 1rem 1.35rem 1rem 1.4rem;
+
+    &--with-photo {
+      grid-template-columns: minmax(0, 1fr) 6rem;
+    }
+
+    &__photo {
+      width: 6rem;
+      height: 6rem;
+    }
+
+    &__text {
+      -webkit-line-clamp: 2;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
   }
 }
 
-@media (max-width: 899px) {
-  .reviews-page__layout {
-    padding-bottom: 3rem;
-  }
-
+@media (max-width: 600px) {
   .review-card {
-    padding: 1.25rem 1.15rem 1.25rem 1.35rem;
+    &--with-photo {
+      grid-template-columns: minmax(0, 1fr) 4.5rem;
+      gap: 0.75rem;
+    }
+
+    &__photo {
+      width: 4.5rem;
+      height: 4.5rem;
+    }
+
+    &__text {
+      -webkit-line-clamp: 4;
+    }
   }
 }
