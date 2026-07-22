@@ -22,4 +22,7 @@ export const COMPANY = {
   workHours: 'Пн–Сб: 9:00–19:00',
   siteUrl: 'https://kavkazkamen.ru',
   city: 'пос. Родники',
+  vkUrl: 'https://vk.ru/kavkazkamen',
+  /** Числовой ID сообщества для виджета сообщений VK */
+  vkGroupId: 239633800,
 } as const;
